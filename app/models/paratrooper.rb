@@ -15,4 +15,5 @@
 #
 
 class Paratrooper < Piece
+  def paratrooper?; true; end
 end

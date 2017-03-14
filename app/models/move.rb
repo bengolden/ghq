@@ -18,9 +18,21 @@
 class Move < Order
 
   def to_s
-    text = "#{piece.name} moves to row #{destination_row}, column #{destination_column}"
-    text += " via row #{intermediate_row}, column #{intermediate_column}" if intermediate_row.present?
+    text = "#{piece.name} moves to #{destination_cell}"
+    text += " via #{intermediate_cell}" if intermediate_row.present?
     text
+  end
+
+  def destination_cell
+    cell(destination_row, destination_column)
+  end
+
+  def intermediate_cell
+    cell(intermediate_row, intermediate_column)
+  end
+
+  def cell(row, column)
+    ("A".."H").to_a[column] + (row + 1).to_s
   end
 
 end

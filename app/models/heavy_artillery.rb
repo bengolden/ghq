@@ -14,5 +14,6 @@
 #  updated_at :datetime
 #
 
-class HeavyArtillery < Piece
+class HeavyArtillery < Artillery
+  def heavy?; true; end
 end

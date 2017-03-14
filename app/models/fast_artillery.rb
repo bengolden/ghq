@@ -14,6 +14,6 @@
 #  updated_at :datetime
 #
 
-class FastArtillery < Piece
+class FastArtillery < Artillery
 
 end

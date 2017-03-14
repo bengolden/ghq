@@ -15,4 +15,6 @@
 #
 
 class Artillery < Piece
+  def artillery?; true; end
+  def heavy?; false; end
 end

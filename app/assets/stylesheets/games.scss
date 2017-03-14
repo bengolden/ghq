@@ -36,6 +36,21 @@
   border-left: 0;
 }
 
+.row-label{
+  float: left;
+  font-weight: bold;
+  font-size: 20px;
+  padding-left: 12px;
+  padding-top: 12px;
+}
+
+.column-label{
+  float: left;
+  font-weight: bold;
+  font-size: 20px;
+  padding: 8px 21px 0 20px;
+}
+
 #reserve-area{
   background-color: lightyellow;
   border: 2px solid black;

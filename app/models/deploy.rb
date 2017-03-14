@@ -15,10 +15,10 @@
 #  updated_at          :datetime
 #
 
-class Deploy < Order
+class Deploy < Move
 
   def to_s
-    "#{piece.name} deploys to row #{destination_row}, column #{destination_column}"
+    "#{piece.name} deploys to #{destination_cell}"
   end
 
 end

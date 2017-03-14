@@ -26,24 +26,26 @@ class Game < ActiveRecord::Base
   end
 
   def create_pieces
-    self.pieces << [Headquarters.new(status: "active", color: "white", column: 1, row: 7),
-                    Headquarters.new(status: "active", color: "black", column: 1, row: 0)]
+    self.pieces << [Headquarters.new(status: "active", color: "white", column: 7, row: 7),
+                    Headquarters.new(status: "active", color: "black", column: 0, row: 0),
+                    Artillery.new(status: "active", color: "white", column: 6, row: 7),
+                    Artillery.new(status: "active", color: "black", column: 1, row: 0)]
     3.times do |i|
-      self.pieces << [Infantry.new(status: "active", color: "white", column: i, row: 6),
+      self.pieces << [Infantry.new(status: "active", color: "white", column: 7-i, row: 6),
                       Infantry.new(status: "active", color: "black", column: i, row: 1)]
     end
 
-    [FastInfantry, FastArtillery, HeavyArtillery, Paratrooper].each do |klass|
+    [FastInfantry, FastInfantry, FastInfantry, FastArtillery, HeavyArtillery, Paratrooper].each do |klass|
       self.pieces << [klass.new(status: "reserve", color: "white"),
                       klass.new(status: "reserve", color: "black")]
     end
 
-    4.times do
+    6.times do
       self.pieces << [Infantry.new(status: "reserve", color: "white"),
                       Infantry.new(status: "reserve", color: "black")]
     end
 
-    4.times do
+    2.times do
       self.pieces << [Artillery.new(status: "reserve", color: "white"),
                       Artillery.new(status: "reserve", color: "black")]
     end
