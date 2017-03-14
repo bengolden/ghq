@@ -1,0 +1,8 @@
+<h4>Orders</h4>
+<ul>
+  <% @game.orders_this_turn.each do |order| %>
+    <li>
+      <%= order.to_s %>
+    </li>
+  <% end %>
+</ul>

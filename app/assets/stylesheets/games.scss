@@ -1,0 +1,55 @@
+// Place all the styles related to the Games controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+
+
+#game-area{
+  margin-top: 50px;
+}
+
+#game-description-area{
+  margin-top: 50px;
+}
+
+.board-square{
+  float: left;
+  height: 55px;
+  width: 55px;
+  border: 1px solid black;
+  border-bottom: 0;
+}
+
+.board-square.bottom-row{
+  border-bottom: 1px solid black;
+}
+
+.board-square.light{
+  background-color: #ffe6b3;
+}
+
+.board-square.dark{
+  background-color: #805500;
+}
+
+.board-square + .board-square{
+  border-left: 0;
+}
+
+#reserve-area{
+  background-color: lightyellow;
+  border: 2px solid black;
+  padding: 15px;
+  min-height: 440px;
+}
+
+#orders-area{
+  background-color: lightgray;
+  border: 2px solid black;
+  padding: 15px;
+  min-height: 440px;
+}
+
+.clear-fix{
+  clear: both;
+}

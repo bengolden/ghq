@@ -1,0 +1,52 @@
+.game-piece{
+  font-size: 8px;
+  font-weight: bold;
+  padding: 12px 10px;
+}
+
+.white-piece{
+  color: white;
+}
+
+.black-piece{
+  color: black;
+}
+
+#reserve-area .game-piece{
+  padding: 3px;
+  float: left;
+}
+
+#reserve-area .white-pieces{
+  margin-top: 255px;
+}
+
+.game-piece.direction-sw{
+  transform: rotate(45deg);
+}
+
+.game-piece.direction-w{
+  transform: rotate(90deg);
+}
+
+.game-piece.direction-nw{
+  transform: rotate(135deg);
+}
+
+.game-piece.direction-n{
+  transform: rotate(180deg);
+}
+
+.game-piece.direction-ne{
+  transform: rotate(225deg);
+}
+
+.game-piece.direction-e{
+  transform: rotate(270deg);
+}
+
+.game-piece.direction-se{
+  transform: rotate(315deg);
+}
+
+

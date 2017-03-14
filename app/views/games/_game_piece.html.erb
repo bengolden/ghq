@@ -1,0 +1,9 @@
+<div class="<%= piece_classes(piece) %>">
+  <% if piece.color == @game.active_player %>
+    <%= link_to "#", data: {toggle: "tooltip"}, title: piece.name do %>
+      <%= image_tag "#{piece.color}-#{piece.css_class}.png" %>
+    <% end %>
+  <% else %>
+    <%= image_tag "#{piece.color}-#{piece.css_class}.png" %>
+  <% end %>
+</div>

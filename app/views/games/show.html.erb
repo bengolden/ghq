@@ -1,0 +1,21 @@
+<div class="row">
+  <div id="game-description-area" class="col-md-10 col-md-offset-1">
+    <h4>Turn: <%= @game.turn_number %></h4>
+    <h5>It is <%= @game.active_player %>'s turn.</h5>
+  </div>
+</div>
+
+<div class="row" id="game-area">
+  <div id="game-board-area" class="col-md-5 col-md-offset-1">
+    <%= render "game_board" %>
+  </div>
+
+  <div id="reserve-area" class="col-md-2">
+    <%= render "game_reserves" %>
+  </div>
+
+  <div id="orders-area" class="col-md-2 col-md-offset-1">
+    <%= render "orders" %>
+  </div>
+
+</div>

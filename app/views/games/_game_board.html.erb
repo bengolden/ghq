@@ -1,0 +1,13 @@
+<div id="game-board">
+
+  <% 8.times do |r| %>
+    <% 8.times do |c| %>
+      <div class="board-square<%= square_classes(r,c) %>">
+        <%= render partial: "game_piece_area",
+                   locals: {piece: @game.pieces.active.find_by(row: r, column: c)} %>
+      </div>
+    <% end %>
+    <div class="clearfix"></div>
+  <% end %>
+
+</div>
