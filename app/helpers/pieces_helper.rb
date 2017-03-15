@@ -8,7 +8,8 @@ module PiecesHelper
     data = {
       toggle: "tooltip",
       unit_type: piece.css_class,
-      status: piece.status
+      status: piece.status,
+      color: piece.color
     }
     if piece.artillery?
       data[:direction] = piece.direction

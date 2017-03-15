@@ -5,8 +5,23 @@
 $(document).ready ->
   $(".game-piece a").click (e)->
     e.preventDefault()
+    clearSelectedPieces()
+    clearHighlights()
+    $(this).addClass("selected-piece")
     if $(this).data("status") == "reserve"
-      # highlight back row
+      deployRow = if $(this).data("color") == "white" then '7' else '0'
+      squares = $(".board-square[data-row='" + deployRow + "'][data-empty='true']")
     else
-      # highlight adjacent cells
+      square = $(this).closest(".board-square")
+      row = square.data("row")
+      column = square.data("column")
+      squares = $(".board-square").filter -> $(this).data("row") >= row - 1 && $(this).data("row") <= row + 1 && $(this).data("column") >= column - 1 && $(this).data("column") <= column + 1 && $(this).data("empty") == true
+
       # if artillery show arrows
+    squares.addClass("highlighted-square")
+
+  clearSelectedPieces = ->
+    $(".selected-piece").removeClass("selected-piece")
+
+  clearHighlights  = ->
+    $(".highlighted-square").removeClass("highlighted-square")

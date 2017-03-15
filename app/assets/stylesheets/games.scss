@@ -20,6 +20,18 @@
   border-bottom: 0;
 }
 
+#game-area .board-square.highlighted-square{
+  border-top: 4px solid darkred;
+  border-bottom: 4px solid darkred;
+  border-left: 4px solid darkred;
+  border-right: 4px solid darkred;
+
+  &:hover{
+    cursor: pointer;
+
+  }
+}
+
 .board-square.bottom-row{
   border-bottom: 1px solid black;
 }
