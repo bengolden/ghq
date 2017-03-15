@@ -5,4 +5,8 @@
 $(document).ready ->
   $(".game-piece a").click (e)->
     e.preventDefault()
-    console.log('hiya')
+    if $(this).data("status") == "reserve"
+      # highlight back row
+    else
+      # highlight adjacent cells
+      # if artillery show arrows
