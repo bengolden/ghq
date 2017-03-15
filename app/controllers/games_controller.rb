@@ -4,7 +4,7 @@ class GamesController < ApplicationController
   end
 
   def show
-    @game = Game.find_by_stub(params[:id])
+    @game = Game.find_by(stub: params[:id])
   end
 
 end
