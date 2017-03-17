@@ -49,4 +49,42 @@
   transform: rotate(315deg);
 }
 
+.arrow{
+  position: absolute;
+  font-weight: bold;
+  font-size: 18px;
+  color: black;
+  z-index: 5;
+}
 
+.n-arrow{
+  margin-left: 23px;
+  margin-top: -4px;
+}
+
+.ne-arrow{
+  margin-left: 34px;
+}
+
+.w-arrow{
+  margin-top: 15px;
+}
+
+.e-arrow{
+  margin-top: 15px;
+  margin-left: 35px;
+}
+
+.sw-arrow{
+  margin-top: 32px;
+}
+
+.s-arrow{
+  margin-left: 23px;
+  margin-top: 30px;
+}
+
+.se-arrow{
+  margin-left: 34px;
+  margin-top: 32px;
+}

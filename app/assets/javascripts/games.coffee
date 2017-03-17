@@ -8,20 +8,26 @@ $(document).ready ->
     clearSelectedPieces()
     clearHighlights()
     $(this).addClass("selected-piece")
+    backRow = if $(this).data("color") == "white" then '7' else '0'
+
     if $(this).data("status") == "reserve"
-      deployRow = if $(this).data("color") == "white" then '7' else '0'
-      squares = $(".board-square[data-row='" + deployRow + "'][data-empty='true']")
+      squares = $(".board-square[data-row='" + backRow + "'][data-empty='true']")
+    else if $(this).data('unit-type') == "paratrooper" && $(this).closest(".board-square").data("row").toString() == backRow
+      squares = $(".board-square").filter -> $(this).data("empty") == true
     else
       square = $(this).closest(".board-square")
       row = square.data("row")
       column = square.data("column")
       squares = $(".board-square").filter -> $(this).data("row") >= row - 1 && $(this).data("row") <= row + 1 && $(this).data("column") >= column - 1 && $(this).data("column") <= column + 1 && $(this).data("empty") == true
 
-      # if artillery show arrows
+      if $(this).data("unit-type") == "artillery"
+        $(this).closest(".board-square").children(".arrow").removeClass("hide")
     squares.addClass("highlighted-square")
+
 
   clearSelectedPieces = ->
     $(".selected-piece").removeClass("selected-piece")
+    $(".arrow").addClass("hide")
 
   clearHighlights  = ->
     $(".highlighted-square").removeClass("highlighted-square")

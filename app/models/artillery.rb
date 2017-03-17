@@ -17,4 +17,8 @@
 class Artillery < Piece
   def artillery?; true; end
   def heavy?; false; end
+
+  def directions_to_turn
+    Piece.directions.keys - [direction]
+  end
 end
