@@ -36,6 +36,8 @@ $(document).ready ->
 
   $("#game-board").on "click", ".highlighted-square", (e)->
     e.preventDefault()
+    # do something different for fast pieces
+    # adjust the cells to reflect the piece having moved
     selectedPiece = $(".selected-piece").closest(".game-piece")
     $(this).append(selectedPiece.clone())
     selectedPiece.remove()
