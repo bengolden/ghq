@@ -19,4 +19,8 @@ module PiecesHelper
     data[:paratrooper] = true if piece.paratrooper?
     data
   end
+
+  def arrow_symbol(direction)
+    {nw: "↖", n: "↑", ne: "↗", w: "←", e: "→", sw: "↙", s: "↓", se: "↘"}[direction.to_sym]
+  end
 end

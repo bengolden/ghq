@@ -24,10 +24,23 @@ $(document).ready ->
         $(this).closest(".board-square").children(".arrow").removeClass("hide")
     squares.addClass("highlighted-square")
 
+  $(".board-square .arrow").click (e)->
+    e.preventDefault()
+    piece = $(this).closest('.board-square').children(".game-piece")
+    direction = $(this).data("direction")
+    # send AJAX request to /moves
+    # append response to moves area
+    setPieceDirection(piece, direction)
+    clearSelectedPieces()
 
   clearSelectedPieces = ->
     $(".selected-piece").removeClass("selected-piece")
     $(".arrow").addClass("hide")
 
-  clearHighlights  = ->
+  clearHighlights = ->
     $(".highlighted-square").removeClass("highlighted-square")
+
+  setPieceDirection = (piece, direction) ->
+    piece.removeClass("direction-"+piece.data("direction"))
+    piece.addClass("direction-"+direction)
+    piece.data("direction", direction)
