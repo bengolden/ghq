@@ -5,7 +5,7 @@
 $(document).ready ->
   gameStub = $(location).attr('pathname').replace("/games/","")
 
-  $("#game-board").on "click", ".game-piece a", (e)->
+  $("#game-area").on "click", ".game-piece a", (e)->
     e.preventDefault()
     if $(".original-square").length > 0
       movedPiece = $(".intermediate-square .game-piece")
@@ -97,6 +97,7 @@ $(document).ready ->
         else
           setPieceDirection(piece, response["initial_direction"])
 
+        $("#confirm-orders").addClass('hide')
         lastOrder.remove()
         $(".game-piece." + $("#active-player").text() + "-piece a").removeClass('disabled')
         if $("#orders-list li").length == 0
@@ -127,8 +128,11 @@ $(document).ready ->
     piece.data("direction", direction)
 
   movePiece = (piece, square) ->
-    square.append(piece.clone())
-    square.attr("data-empty", "false")
+    if square.length == 0
+      $(".row ." + $("#active-player").text() + "-pieces").append(piece.clone())
+    else
+      square.append(piece.clone())
+      square.attr("data-empty", "false")
     piece.closest(".board-square").attr("data-empty", "true")
     piece.remove()
 
