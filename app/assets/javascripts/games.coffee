@@ -7,6 +7,10 @@ $(document).ready ->
 
   $(".game-piece a").click (e)->
     e.preventDefault()
+    if $(".original-square").length > 0
+      movedPiece = $(".intermediate-square .game-piece")
+      movePiece(movedPiece, $(".original-square"))
+
     clearSelectedPieces()
     clearHighlights()
     $(this).addClass("selected-piece")
@@ -49,7 +53,7 @@ $(document).ready ->
     square = piece.closest(".board-square")
     row = square.data("row")
     column = square.data("column")
-    squares = $(".board-square").filter -> $(this).data("row") >= row - 1 && $(this).data("row") <= row + 1 && $(this).data("column") >= column - 1 && $(this).data("column") <= column + 1 && $(this).attr("data-empty") == "true"
+    squares = $(".board-square").filter -> $(this).data("row") >= row - 1 && $(this).data("row") <= row + 1 && $(this).data("column") >= column - 1 && $(this).data("column") <= column + 1 && ($(this).attr("data-empty") == "true" || $(this).hasClass("intermediate-square"))
     squares.addClass("highlighted-square")
 
   $("#game-board").on "click", ".highlighted-square", (e)->
@@ -58,8 +62,10 @@ $(document).ready ->
     intermediate = $(".intermediate-square")
     selectedPiece = $(".selected-piece").closest(".game-piece")
     if $(".selected-piece").data("fast") == true && intermediate.length == 0 && $(".selected-piece").data("status") != "reserve"
+      selectedPiece.closest(".board-square").addClass("original-square")
       movePiece(selectedPiece, destination)
       destination.addClass("intermediate-square")
+
       clearHighlights()
       highlightAdjacentSquares($(this))
     else
@@ -96,6 +102,7 @@ $(document).ready ->
   clearSelectedPieces = ->
     $(".selected-piece").removeClass("selected-piece")
     $(".intermediate-square").removeClass("intermediate-square")
+    $(".original-square").removeClass("original-square")
 
   clearHighlights = ->
     $(".arrow").addClass("hide")
