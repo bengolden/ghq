@@ -13,12 +13,29 @@
 #  final_direction     :integer
 #  created_at          :datetime
 #  updated_at          :datetime
+#  initial_row         :integer
+#  initial_column      :integer
+#  initial_direction   :integer
 #
 
 class Rotate < Order
 
+  before_create :set_initial_direction
+
+  def process!
+    piece.update(direction: final_direction)
+  end
+
+  def undo!
+    piece.update(direction: initial_direction)
+  end
+
   def to_s
     "#{piece.name} rotates to face #{final_direction}"
+  end
+
+  def set_initial_direction
+    self.initial_direction = piece.direction
   end
 
 end

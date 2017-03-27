@@ -1,8 +1,10 @@
 <h4>Orders</h4>
-<ul>
+<ul id="orders-list">
   <% @game.orders_this_turn.each do |order| %>
-    <li>
-      <%= order.to_s %>
-    </li>
+    <%= render "order", order: order %>
   <% end %>
 </ul>
+
+<button id="undo-order" class="btn btn-primary <%= 'hide' unless show_undo_orders? %>">
+  Undo
+</button>

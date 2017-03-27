@@ -13,6 +13,9 @@
 #  final_direction     :integer
 #  created_at          :datetime
 #  updated_at          :datetime
+#  initial_row         :integer
+#  initial_column      :integer
+#  initial_direction   :integer
 #
 
 class Order < ActiveRecord::Base
@@ -20,5 +23,6 @@ class Order < ActiveRecord::Base
 
   scope :for_turn, ->(turn_number){ where(turn_number: turn_number) }
 
-  enum final_direction: [:north, :northeast, :east, :southeast, :south, :southwest, :west, :northwest]
+  enum final_direction: [:n, :ne, :e, :se, :s, :sw, :w, :nw], _prefix: :final
+  enum initial_direction: [:n, :ne, :e, :se, :s, :sw, :w, :nw], _prefix: :initial
 end

@@ -39,6 +39,8 @@ $(document).ready ->
     # do something different for fast pieces
     # adjust the cells to reflect the piece having moved
     selectedPiece = $(".selected-piece").closest(".game-piece")
+    
+
     $(this).append(selectedPiece.clone())
     selectedPiece.remove()
     clearSelectedPieces()
@@ -48,11 +50,20 @@ $(document).ready ->
     e.preventDefault()
     piece = $(this).closest('.board-square').children(".game-piece")
     direction = $(this).data("direction")
-    # send AJAX request to /moves
-    # append response to moves area
-    setPieceDirection(piece, direction)
-    clearSelectedPieces()
-    clearHighlights()
+    gameStub = $(location).attr('pathname').replace("/games/","")
+
+    $.post "/orders",
+      type: "Rotate",
+      pieceId: piece.data("id"),
+      newDirection: direction,
+      gameStub: gameStub
+      (response)->
+        $("#orders-list").append(response)
+        setPieceDirection(piece, direction)
+        $("#undo-order").removeClass('hide')
+        clearSelectedPieces()
+        clearHighlights()
+
 
   clearSelectedPieces = ->
     $(".selected-piece").removeClass("selected-piece")

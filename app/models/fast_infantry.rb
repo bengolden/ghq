@@ -15,4 +15,5 @@
 #
 
 class FastInfantry < Piece
+  include Concerns::FastPiece
 end

@@ -13,6 +13,9 @@
 #  final_direction     :integer
 #  created_at          :datetime
 #  updated_at          :datetime
+#  initial_row         :integer
+#  initial_column      :integer
+#  initial_direction   :integer
 #
 
 class Deploy < Move

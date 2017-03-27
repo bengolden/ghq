@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170314014155) do
+ActiveRecord::Schema.define(version: 20170327144902) do
 
   create_table "games", force: :cascade do |t|
     t.integer  "turn_number"
@@ -32,6 +32,9 @@ ActiveRecord::Schema.define(version: 20170314014155) do
     t.integer  "final_direction"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "initial_row"
+    t.integer  "initial_column"
+    t.integer  "initial_direction"
   end
 
   create_table "pieces", force: :cascade do |t|

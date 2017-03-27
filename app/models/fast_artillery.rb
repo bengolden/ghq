@@ -15,5 +15,6 @@
 #
 
 class FastArtillery < Artillery
+  include Concerns::FastPiece
 
 end

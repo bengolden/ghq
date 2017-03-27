@@ -1,5 +1,9 @@
 module GamesHelper
 
+  def show_undo_orders?
+    @game.orders_this_turn.exists?
+  end
+
   def square_classes(r,c)
     classes = ""
     classes +=' bottom-row' if r == 7
