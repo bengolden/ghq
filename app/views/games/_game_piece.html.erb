@@ -1,14 +1,13 @@
-<% if piece.active? && piece.artillery? %>
+<% if piece.artillery? %>
   <% piece.directions_to_turn.each do |direction| %>
     <a href="" class="arrow <%= direction %>-arrow hide" data-direction=<%= direction %>><%= arrow_symbol(direction) %></a>
   <% end %>
 <% end %>
 <div class="<%= piece_classes(piece) %>" data-direction=<%= piece.direction %> data-id=<%= piece.id %>>
-  <% if piece.color == @game.active_player %>
-    <%= link_to "#", data: piece_data(piece), title: piece.name do %>
-      <%= image_tag "#{piece.color}-#{piece.css_class}.png" %>
-    <% end %>
-  <% else %>
+  <%= link_to "#",
+              data: piece_data(piece),
+              title: piece.name,
+              class: piece.color == @game.active_player ? nil : "disabled" do %>
     <%= image_tag "#{piece.color}-#{piece.css_class}.png" %>
   <% end %>
 </div>

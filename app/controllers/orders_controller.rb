@@ -9,7 +9,9 @@ class OrdersController < ApplicationController
                                               turn_number: game.turn_number,
                                               final_direction: params["newDirection"],
                                               destination_row: params["newRow"],
-                                              destination_column: params["newColumn"]
+                                              destination_column: params["newColumn"],
+                                              intermediate_row: params["intermediateRow"],
+                                              intermediate_column: params["intermediateColumn"]
                                               )
     order.process!
     render partial: "games/order", locals: {order: order}

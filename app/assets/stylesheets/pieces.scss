@@ -4,12 +4,9 @@
   padding: 12px 10px;
 }
 
-.white-piece{
-  color: white;
-}
-
-.black-piece{
-  color: black;
+.game-piece a.disabled{
+  pointer-events: none;
+  cursor: default;
 }
 
 #reserve-area .game-piece{

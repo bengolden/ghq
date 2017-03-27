@@ -5,6 +5,14 @@
   <% end %>
 </ul>
 
-<button id="undo-order" class="btn btn-primary <%= 'hide' unless show_undo_orders? %>">
-  Undo
-</button>
+<div id="undo-order" class=<%= 'hide' unless show_undo_orders? %>>
+  <button class="btn btn-primary">
+    Undo
+  </button>
+</div>
+
+<div id="confirm-orders" class=<%='hide' unless show_confirm_orders?  %>>
+  <button class="btn btn-primary">
+    Confirm orders
+  </button>
+</div>

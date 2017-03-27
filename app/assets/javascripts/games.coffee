@@ -17,8 +17,25 @@ $(document).ready ->
       highlightEmptySquares()
     else
       highlightAdjacentSquares($(this))
-      if $(this).data("unit-type") == "artillery"
+      if $(this).data("direction") != null
         $(this).closest(".board-square").children(".arrow").removeClass("hide")
+
+  $("#confirm-orders").click (e)->
+    e.preventDefault()
+    $.post "/games/" + gameStub,
+      _method: 'PUT'
+      (response)->
+        $("#orders-list li").remove()
+        $("#turn-number").text( parseInt($("#turn-number").text()) + 1 )
+        activePlayer = $("#active-player")
+        $("#undo-order").addClass('hide')
+        $("#confirm-orders").addClass('hide')
+        if activePlayer.text() == "white"
+          activePlayer.text("black")
+        else
+          activePlayer.text("white")
+        $(".game-piece." + activePlayer.text() + "-piece a").removeClass('disabled')
+
 
   highlightBackRow = (backRow) ->
     squares = $(".board-square[data-row='" + backRow + "'][data-empty='true']")
@@ -38,52 +55,69 @@ $(document).ready ->
   $("#game-board").on "click", ".highlighted-square", (e)->
     e.preventDefault()
     destination = $(this)
+    intermediate = $(".intermediate-square")
     square = $(this)
-    # do something different for fast pieces
-    # adjust the cells to reflect the piece having moved
+    # TODO adjust the cells to reflect the piece having moved
     selectedPiece = $(".selected-piece").closest(".game-piece")
-    if selectedPiece.data("fast") == true
-      console.log("I'm fast")
+    if $(".selected-piece").data("fast") == true && intermediate.length == 0 && $(".selected-piece").data("status") != "reserve"
+      movePiece(selectedPiece, square)
+      square.addClass("intermediate-square")
+      clearHighlights()
+      highlightAdjacentSquares($(this))
     else
+      type = if selectedPiece.closest(".board-square").length == 0
+        "Deploy"
+      else
+        "Move"
+
       $.post "/orders",
-        type: "Move",
+        type: type,
         pieceId: selectedPiece.data("id"),
         newRow: destination.data("row"),
         newColumn: destination.data("column"),
+        intermediateRow: intermediate.data("row"),
+        intermediateColumn: intermediate.data("column"),
         gameStub: gameStub
         (response)->
-          $("#orders-list").append(response)
-          square.append(selectedPiece.clone())
-          selectedPiece.remove()
-          clearSelectedPieces()
-          clearHighlights()
+          movePiece(selectedPiece, square)
+          processOrder($(".selected-piece").closest(".game-piece"), response)
 
   $(".board-square .arrow").click (e)->
     e.preventDefault()
     piece = $(this).closest('.board-square').children(".game-piece")
     direction = $(this).data("direction")
-
     $.post "/orders",
       type: "Rotate",
       pieceId: piece.data("id"),
       newDirection: direction,
       gameStub: gameStub
       (response)->
-        $("#orders-list").append(response)
         setPieceDirection(piece, direction)
-        $("#undo-order").removeClass('hide')
-        clearSelectedPieces()
-        clearHighlights()
-
+        processOrder(piece, response)
 
   clearSelectedPieces = ->
     $(".selected-piece").removeClass("selected-piece")
-    $(".arrow").addClass("hide")
+    $(".intermediate-square").removeClass("intermediate-square")
 
   clearHighlights = ->
+    $(".arrow").addClass("hide")
     $(".highlighted-square").removeClass("highlighted-square")
+
+  processOrder = (piece, orderDescription) ->
+    piece.children('a').addClass('disabled')
+    $("#orders-list").append(orderDescription)
+    $("#undo-order").removeClass('hide')
+    clearSelectedPieces()
+    clearHighlights()
+    if $("#orders-list li").length == 3
+      $("#confirm-orders").removeClass('hide')
+      $(".game-piece a").addClass('disabled')
 
   setPieceDirection = (piece, direction) ->
     piece.removeClass("direction-"+piece.data("direction"))
     piece.addClass("direction-"+direction)
     piece.data("direction", direction)
+
+  movePiece = (piece, square) ->
+    square.append(piece.clone())
+    piece.remove()

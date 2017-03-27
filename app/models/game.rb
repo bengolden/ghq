@@ -19,6 +19,22 @@ class Game < ActiveRecord::Base
   before_create :set_defaults
   before_create :create_pieces
 
+  def process_turn!
+    if infantry_all_engaged?
+      self.turn_number += 1
+      toggle_active_player
+      self.save
+    end
+  end
+
+  def infantry_all_engaged?
+    true
+  end
+
+  def toggle_active_player
+    self.active_player = (active_player == "white") ? :black : :white
+  end
+
   def set_defaults
     self.stub = (0..9).map{ ('a'..'z').to_a.sample}.join
     self.active_player = "white"
