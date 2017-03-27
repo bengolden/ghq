@@ -25,4 +25,9 @@ class Order < ActiveRecord::Base
 
   enum final_direction: [:n, :ne, :e, :se, :s, :sw, :w, :nw], _prefix: :final
   enum initial_direction: [:n, :ne, :e, :se, :s, :sw, :w, :nw], _prefix: :initial
+
+  def undo_attributes
+    {piece_id: piece_id, initial_row: initial_row, initial_column: initial_column, initial_direction: initial_direction}
+  end
+
 end

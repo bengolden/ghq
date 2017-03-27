@@ -5,7 +5,7 @@
 $(document).ready ->
   gameStub = $(location).attr('pathname').replace("/games/","")
 
-  $(".game-piece a").click (e)->
+  $("#game-board").on "click", ".game-piece a", (e)->
     e.preventDefault()
     if $(".original-square").length > 0
       movedPiece = $(".intermediate-square .game-piece")
@@ -23,38 +23,6 @@ $(document).ready ->
       highlightAdjacentSquares($(this))
       if $(this).data("direction") != null
         $(this).closest(".board-square").children(".arrow").removeClass("hide")
-
-  $("#confirm-orders").click (e)->
-    e.preventDefault()
-    $.post "/games/" + gameStub,
-      _method: 'PUT'
-      (response)->
-        $("#orders-list li").remove()
-        $("#turn-number").text( parseInt($("#turn-number").text()) + 1 )
-        activePlayer = $("#active-player")
-        $("#undo-order").addClass('hide')
-        $("#confirm-orders").addClass('hide')
-        if activePlayer.text() == "white"
-          activePlayer.text("black")
-        else
-          activePlayer.text("white")
-        $(".game-piece." + activePlayer.text() + "-piece a").removeClass('disabled')
-
-
-  highlightBackRow = (backRow) ->
-    squares = $(".board-square[data-row='" + backRow + "'][data-empty='true']")
-    squares.addClass("highlighted-square")
-
-  highlightEmptySquares = ->
-    squares = $(".board-square").filter -> $(this).data("empty") == true
-    squares.addClass("highlighted-square")
-
-  highlightAdjacentSquares = (piece) ->
-    square = piece.closest(".board-square")
-    row = square.data("row")
-    column = square.data("column")
-    squares = $(".board-square").filter -> $(this).data("row") >= row - 1 && $(this).data("row") <= row + 1 && $(this).data("column") >= column - 1 && $(this).data("column") <= column + 1 && ($(this).attr("data-empty") == "true" || $(this).hasClass("intermediate-square"))
-    squares.addClass("highlighted-square")
 
   $("#game-board").on "click", ".highlighted-square", (e)->
     e.preventDefault()
@@ -99,6 +67,41 @@ $(document).ready ->
         setPieceDirection(piece, direction)
         processOrder(piece, response)
 
+  $("#confirm-orders").click (e)->
+    e.preventDefault()
+    $.post "/games/" + gameStub,
+      _method: 'PUT'
+      (response)->
+        $("#orders-list li").remove()
+        $("#turn-number").text( parseInt($("#turn-number").text()) + 1 )
+        activePlayer = $("#active-player")
+        $("#undo-order").addClass('hide')
+        $("#confirm-orders").addClass('hide')
+        if activePlayer.text() == "white"
+          activePlayer.text("black")
+        else
+          activePlayer.text("white")
+        $(".game-piece." + activePlayer.text() + "-piece a").removeClass('disabled')
+
+  $("#undo-order").click (e)->
+    e.preventDefault()
+    lastOrder = $("#orders-list li").last()
+    $.post "/orders/" + lastOrder.data("order-id"),
+      _method: 'DELETE',
+      gameStub: gameStub
+      (response)->
+        piece = $(".game-piece[data-id=" + response["piece_id"] + "]")
+        if response["initial_direction"] == null
+          destination = $(".board-square[data-row=" + response["initial_row"] + "][data-column=" + response["initial_column"] + "]")
+          movePiece(piece, destination)
+        else
+          setPieceDirection(piece, response["initial_direction"])
+
+        lastOrder.remove()
+        $(".game-piece." + $("#active-player").text() + "-piece a").removeClass('disabled')
+        if $("#orders-list li").length == 0
+          $("#undo-order").addClass('hide')
+
   clearSelectedPieces = ->
     $(".selected-piece").removeClass("selected-piece")
     $(".intermediate-square").removeClass("intermediate-square")
@@ -128,3 +131,18 @@ $(document).ready ->
     square.attr("data-empty", "false")
     piece.closest(".board-square").attr("data-empty", "true")
     piece.remove()
+
+  highlightBackRow = (backRow) ->
+    squares = $(".board-square[data-row='" + backRow + "'][data-empty='true']")
+    squares.addClass("highlighted-square")
+
+  highlightEmptySquares = ->
+    squares = $(".board-square").filter -> $(this).data("empty") == true
+    squares.addClass("highlighted-square")
+
+  highlightAdjacentSquares = (piece) ->
+    square = piece.closest(".board-square")
+    row = square.data("row")
+    column = square.data("column")
+    squares = $(".board-square").filter -> $(this).data("row") >= row - 1 && $(this).data("row") <= row + 1 && $(this).data("column") >= column - 1 && $(this).data("column") <= column + 1 && ($(this).attr("data-empty") == "true" || $(this).hasClass("intermediate-square"))
+    squares.addClass("highlighted-square")

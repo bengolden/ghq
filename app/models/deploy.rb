@@ -25,7 +25,8 @@ class Deploy < Move
   end
 
   def undo!
-    piece.update(status: :reserve, row: nil, column: nil  )
+    piece.status = :reserve
+    super
   end
 
 

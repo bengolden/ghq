@@ -27,7 +27,9 @@ class Move < Order
   end
 
   def undo!
-    piece.update(row: initial_row, column: initial_column)
+    piece.row = initial_row
+    piece.column = initial_column
+    piece.save
   end
 
   def to_s
