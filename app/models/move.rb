@@ -20,6 +20,16 @@
 
 class Move < Order
 
+  before_create :set_initial_row_and_column
+
+  def process!
+    piece.update(row: destination_row, column: destination_column)
+  end
+
+  def undo!
+    piece.update(row: initial_row, column: initial_column)
+  end
+
   def to_s
     text = "#{piece.name} moves to #{destination_cell}"
     text += " via #{intermediate_cell}" if intermediate_row.present?
@@ -36,6 +46,13 @@ class Move < Order
 
   def cell(row, column)
     ("A".."H").to_a[column] + (row + 1).to_s
+  end
+
+  private
+
+  def set_initial_row_and_column
+    self.initial_row = piece.row
+    self.initial_column = piece.column
   end
 
 end

@@ -3,6 +3,7 @@
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
 $(document).ready ->
+  gameStub = $(location).attr('pathname').replace("/games/","")
 
   $(".game-piece a").click (e)->
     e.preventDefault()
@@ -36,21 +37,31 @@ $(document).ready ->
 
   $("#game-board").on "click", ".highlighted-square", (e)->
     e.preventDefault()
+    destination = $(this)
+    square = $(this)
     # do something different for fast pieces
     # adjust the cells to reflect the piece having moved
     selectedPiece = $(".selected-piece").closest(".game-piece")
-    
-
-    $(this).append(selectedPiece.clone())
-    selectedPiece.remove()
-    clearSelectedPieces()
-    clearHighlights()
+    if selectedPiece.data("fast") == true
+      console.log("I'm fast")
+    else
+      $.post "/orders",
+        type: "Move",
+        pieceId: selectedPiece.data("id"),
+        newRow: destination.data("row"),
+        newColumn: destination.data("column"),
+        gameStub: gameStub
+        (response)->
+          $("#orders-list").append(response)
+          square.append(selectedPiece.clone())
+          selectedPiece.remove()
+          clearSelectedPieces()
+          clearHighlights()
 
   $(".board-square .arrow").click (e)->
     e.preventDefault()
     piece = $(this).closest('.board-square').children(".game-piece")
     direction = $(this).data("direction")
-    gameStub = $(location).attr('pathname').replace("/games/","")
 
     $.post "/orders",
       type: "Rotate",
