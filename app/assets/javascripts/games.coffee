@@ -49,19 +49,17 @@ $(document).ready ->
     square = piece.closest(".board-square")
     row = square.data("row")
     column = square.data("column")
-    squares = $(".board-square").filter -> $(this).data("row") >= row - 1 && $(this).data("row") <= row + 1 && $(this).data("column") >= column - 1 && $(this).data("column") <= column + 1 && $(this).data("empty") == true
+    squares = $(".board-square").filter -> $(this).data("row") >= row - 1 && $(this).data("row") <= row + 1 && $(this).data("column") >= column - 1 && $(this).data("column") <= column + 1 && $(this).attr("data-empty") == "true"
     squares.addClass("highlighted-square")
 
   $("#game-board").on "click", ".highlighted-square", (e)->
     e.preventDefault()
     destination = $(this)
     intermediate = $(".intermediate-square")
-    square = $(this)
-    # TODO adjust the cells to reflect the piece having moved
     selectedPiece = $(".selected-piece").closest(".game-piece")
     if $(".selected-piece").data("fast") == true && intermediate.length == 0 && $(".selected-piece").data("status") != "reserve"
-      movePiece(selectedPiece, square)
-      square.addClass("intermediate-square")
+      movePiece(selectedPiece, destination)
+      destination.addClass("intermediate-square")
       clearHighlights()
       highlightAdjacentSquares($(this))
     else
@@ -79,7 +77,7 @@ $(document).ready ->
         intermediateColumn: intermediate.data("column"),
         gameStub: gameStub
         (response)->
-          movePiece(selectedPiece, square)
+          movePiece(selectedPiece, destination)
           processOrder($(".selected-piece").closest(".game-piece"), response)
 
   $(".board-square .arrow").click (e)->
@@ -120,4 +118,6 @@ $(document).ready ->
 
   movePiece = (piece, square) ->
     square.append(piece.clone())
+    square.attr("data-empty", "false")
+    piece.closest(".board-square").attr("data-empty", "true")
     piece.remove()
