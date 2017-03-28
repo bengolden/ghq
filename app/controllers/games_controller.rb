@@ -7,11 +7,12 @@ class GamesController < ApplicationController
   end
 
   def show
-    
+    @squares_under_fire = @game.squares_under_fire    
   end
 
   def update
     @game.process_turn!
+    render json: @game.squares_under_fire
   end
 
   private

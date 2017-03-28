@@ -22,7 +22,7 @@ $(document).ready ->
     else
       highlightAdjacentSquares($(this))
       if $(this).data("direction") != null
-        $(this).closest(".board-square").children(".arrow").removeClass("hide")
+        $(this).closest(".board-square").find(".arrow").removeClass("hide")
 
   $("#game-board").on "click", ".highlighted-square", (e)->
     e.preventDefault()
@@ -56,7 +56,7 @@ $(document).ready ->
 
   $(".board-square .arrow").click (e)->
     e.preventDefault()
-    piece = $(this).closest('.board-square').children(".game-piece")
+    piece = $(this).closest('.board-square').find(".game-piece")
     direction = $(this).data("direction")
     $.post "/orders",
       type: "Rotate",
@@ -77,6 +77,11 @@ $(document).ready ->
         activePlayer = $("#active-player")
         $("#undo-order").addClass('hide')
         $("#confirm-orders").addClass('hide')
+        $(".under-fire").removeClass('under-fire')
+
+        $(response).each ->
+          $(".board-square[data-row=" + this["row"] + "][data-column=" + this["column"] + "]").children(".inner-square").addClass("under-fire")
+
         if activePlayer.text() == "white"
           activePlayer.text("black")
         else
@@ -131,13 +136,13 @@ $(document).ready ->
     if square.length == 0
       $(".row ." + $("#active-player").text() + "-pieces").append(piece.clone())
     else
-      square.append(piece.clone())
+      square.find(".inner-square").append(piece.clone())
       square.attr("data-empty", "false")
     piece.closest(".board-square").attr("data-empty", "true")
     piece.remove()
 
   highlightBackRow = (backRow) ->
-    squares = $(".board-square[data-row='" + backRow + "'][data-empty='true']")
+    squares = $(".board-square[data-row='" + backRow + "'][data-empty='true'][data-under-fire='false']")
     squares.addClass("highlighted-square")
 
   highlightEmptySquares = ->
@@ -148,5 +153,5 @@ $(document).ready ->
     square = piece.closest(".board-square")
     row = square.data("row")
     column = square.data("column")
-    squares = $(".board-square").filter -> $(this).data("row") >= row - 1 && $(this).data("row") <= row + 1 && $(this).data("column") >= column - 1 && $(this).data("column") <= column + 1 && ($(this).attr("data-empty") == "true" || $(this).hasClass("intermediate-square"))
+    squares = $(".board-square").filter -> $(this).data("row") >= row - 1 && $(this).data("row") <= row + 1 && $(this).data("column") >= column - 1 && $(this).data("column") <= column + 1 && ($(this).attr("data-empty") == "true" || $(this).hasClass("intermediate-square")) && $(this).data("under-fire") == false
     squares.addClass("highlighted-square")

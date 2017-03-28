@@ -18,4 +18,8 @@ module GamesHelper
   def piece_on_square(r,c)
     @game.pieces.find{|p| p.status == "active" && p.row == r && p.column == c}
   end
+
+  def under_fire?(r,c)
+    @squares_under_fire.include?({row: r, column: c})
+  end
 end

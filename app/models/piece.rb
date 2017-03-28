@@ -23,6 +23,7 @@ class Piece < ActiveRecord::Base
   enum direction: [:n, :ne, :e, :se, :s, :sw, :w, :nw]
 
   before_create :set_direction
+  scope :artillery, ->{ where(type: ["Artillery", "FastArtillery", "HeavyArtillery"]) }
 
   def artillery?; false; end
   def fast?; false; end

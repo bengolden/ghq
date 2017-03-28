@@ -22,7 +22,7 @@ class Game < ActiveRecord::Base
   def process_turn!
     if infantry_all_engaged?
       self.turn_number += 1
-      toggle_active_player
+      toggle_active_player!
       self.save
     end
   end
@@ -31,8 +31,16 @@ class Game < ActiveRecord::Base
     true
   end
 
-  def toggle_active_player
-    self.active_player = (active_player == "white") ? :black : :white
+  def squares_under_fire
+    pieces.where(color: inactive_player).active.artillery.map(&:squares_under_fire).flatten.uniq
+  end
+
+  def inactive_player
+    (active_player == "white") ? "black" : "white"
+  end
+
+  def toggle_active_player!
+    self.active_player = inactive_player
   end
 
   def set_defaults

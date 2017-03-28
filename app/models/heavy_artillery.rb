@@ -16,4 +16,5 @@
 
 class HeavyArtillery < Artillery
   def heavy?; true; end
+  def range; 3; end
 end
