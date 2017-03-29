@@ -54,7 +54,7 @@ $(document).ready ->
           movePiece(selectedPiece, destination)
           processOrder($(".selected-piece").closest(".game-piece"), response)
 
-  $(".board-square .arrow").click (e)->
+  $("#game-board").on "click", ".board-square .arrow", (e)->
     e.preventDefault()
     piece = $(this).closest('.board-square').find(".game-piece")
     direction = $(this).data("direction")
@@ -75,12 +75,15 @@ $(document).ready ->
         $("#orders-list li").remove()
         $("#turn-number").text( parseInt($("#turn-number").text()) + 1 )
         activePlayer = $("#active-player")
-        $("#undo-order").addClass('hide')
-        $("#confirm-orders").addClass('hide')
-        $(".under-fire").removeClass('under-fire')
+        $("#undo-order").addClass("hide")
+        $("#confirm-orders").addClass("hide")
+        $(".under-fire").removeClass("under-fire")
+        $(".board-square").data("under-fire","false")
 
         $(response).each ->
-          $(".board-square[data-row=" + this["row"] + "][data-column=" + this["column"] + "]").children(".inner-square").addClass("under-fire")
+          square = $(".board-square[data-row=" + this["row"] + "][data-column=" + this["column"] + "]")
+          square.data("under-fire", "true")
+          square.children(".inner-square").addClass("under-fire")
 
         if activePlayer.text() == "white"
           activePlayer.text("black")
