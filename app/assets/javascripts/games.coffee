@@ -137,13 +137,18 @@ $(document).ready ->
 
   movePiece = (piece, square) ->
     arrows = piece.closest(".board-square").find(".arrow")
-    if square.length == 0
+    undoDeploy = square.length == 0
+    if undoDeploy
       newSquare = $(".row ." + $("#active-player").text() + "-pieces")
     else
       newSquare = square.find(".inner-square")
       square.attr("data-empty", "false")
     newSquare.append(arrows.clone())
     newSquare.append(piece.clone())
+    if undoDeploy
+      newSquare.find(".game-piece a").attr("data-status", "reserve")
+    else
+      newSquare.find(".game-piece a").attr("data-status", "active")
     piece.closest(".board-square").attr("data-empty", "true")
     arrows.remove()
     piece.remove()
