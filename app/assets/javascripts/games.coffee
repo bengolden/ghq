@@ -37,7 +37,7 @@ $(document).ready ->
       clearHighlights()
       highlightAdjacentSquares($(this))
     else
-      type = if selectedPiece.closest(".board-square").length == 0
+      type = if selectedPiece.children("a").data("status") == "reserve"
         "Deploy"
       else
         "Move"
@@ -78,7 +78,7 @@ $(document).ready ->
         $("#undo-order").addClass("hide")
         $("#confirm-orders").addClass("hide")
         $(".under-fire").removeClass("under-fire")
-        $(".board-square").data("under-fire","false")
+        $(".board-square").data("under-fire",false)
 
         $(response).each ->
           square = $(".board-square[data-row=" + this["row"] + "][data-column=" + this["column"] + "]")
@@ -136,12 +136,16 @@ $(document).ready ->
     piece.data("direction", direction)
 
   movePiece = (piece, square) ->
+    arrows = piece.closest(".board-square").find(".arrow")
     if square.length == 0
-      $(".row ." + $("#active-player").text() + "-pieces").append(piece.clone())
+      newSquare = $(".row ." + $("#active-player").text() + "-pieces")
     else
-      square.find(".inner-square").append(piece.clone())
+      newSquare = square.find(".inner-square")
       square.attr("data-empty", "false")
+    newSquare.append(arrows.clone())
+    newSquare.append(piece.clone())
     piece.closest(".board-square").attr("data-empty", "true")
+    arrows.remove()
     piece.remove()
 
   highlightBackRow = (backRow) ->
@@ -157,4 +161,5 @@ $(document).ready ->
     row = square.data("row")
     column = square.data("column")
     squares = $(".board-square").filter -> $(this).data("row") >= row - 1 && $(this).data("row") <= row + 1 && $(this).data("column") >= column - 1 && $(this).data("column") <= column + 1 && ($(this).attr("data-empty") == "true" || $(this).hasClass("intermediate-square")) && $(this).data("under-fire") == false
+
     squares.addClass("highlighted-square")

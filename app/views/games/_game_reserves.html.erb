@@ -1,11 +1,15 @@
 <div class="row black-pieces">
   <% @game.pieces.black.order(:color, :type).reserve.each do |piece| %>
+    <div class="board-square">
       <%= render "game_piece", piece: piece %>
+    </div>
   <% end %>
 </div>
 
 <div class="row white-pieces">
   <% @game.pieces.white.order(:color, :type).reserve.each do |piece| %>
-    <%= render "game_piece", piece: piece %>
+    <div class="board-square">
+      <%= render "game_piece", piece: piece %>
+    </div>
   <% end %>
 </div>
