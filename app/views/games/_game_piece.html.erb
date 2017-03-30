@@ -1,5 +1,5 @@
 <% if piece.artillery? %>
-  <% piece.directions_to_turn.each do |direction| %>
+  <% Piece.directions.keys.each do |direction| %>
     <a href="" class="arrow <%= direction %>-arrow hide" data-direction=<%= direction %>><%= arrow_symbol(direction) %></a>
   <% end %>
 <% end %>

@@ -19,10 +19,6 @@ class Artillery < Piece
   def heavy?; false; end
   def range; 2; end
 
-  def directions_to_turn
-    Piece.directions.keys - [direction]
-  end
-
   def squares_under_fire
     (1..range).map do |i|
       row = self.row + (i if facing?('s')).to_i - (i if facing?('n')).to_i

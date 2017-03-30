@@ -22,8 +22,9 @@ $(document).ready ->
       highlightEmptySquares()
     else
       highlightAdjacentSquares($(this))
-      if $(this).data("direction") != null
-        $(this).closest(".board-square").find(".arrow").removeClass("hide")
+      direction = $(this).attr("data-direction")
+      if direction != null
+        $(this).closest(".board-square").find(".arrow[data-direction!='" + direction + "']").removeClass('hide')
 
   $("#game-board").on "click", ".highlighted-square", (e)->
     e.preventDefault()
@@ -135,7 +136,8 @@ $(document).ready ->
   setPieceDirection = (piece, direction) ->
     piece.removeClass("direction-"+piece.data("direction"))
     piece.addClass("direction-"+direction)
-    piece.data("direction", direction)
+    piece.attr("data-direction", direction)
+    piece.find("a").attr("data-direction", direction)
 
   movePiece = (piece, square) ->
     arrows = piece.closest(".board-square").find(".arrow")
