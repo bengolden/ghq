@@ -9,7 +9,8 @@ $(document).ready ->
     e.preventDefault()
     if $(".original-square").length > 0
       movedPiece = $(".intermediate-square .game-piece")
-      movePiece(movedPiece, $(".original-square"))
+      if movedPiece.data("id") != $(this).closest(".game-piece").data("id")
+        movePiece(movedPiece, $(".original-square"))
 
     clearSelectedPieces()
     clearHighlights()
@@ -29,6 +30,7 @@ $(document).ready ->
     destination = $(this)
     intermediate = $(".intermediate-square")
     selectedPiece = $(".selected-piece").closest(".game-piece")
+
     if $(".selected-piece").data("fast") == true && intermediate.length == 0 && $(".selected-piece").data("status") != "reserve"
       selectedPiece.closest(".board-square").addClass("original-square")
       movePiece(selectedPiece, destination)

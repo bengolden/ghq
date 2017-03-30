@@ -1,5 +1,4 @@
 <div id="game-board">
-
   <% 8.times do |r| %>
     <% 8.times do |c| %>
       <div class="board-square<%= square_classes(r,c) %>" data-row=<%= r %> data-column=<%= c %> data-empty=<%= piece_on_square(r,c).nil? %> data-under-fire=<%= under_fire?(r,c) %>>
