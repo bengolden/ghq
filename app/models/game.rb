@@ -11,6 +11,7 @@
 #
 
 class Game < ActiveRecord::Base
+  include Concerns::Combat
 
   enum active_player: [:white, :black]
   has_many :pieces, dependent: :destroy
@@ -20,15 +21,16 @@ class Game < ActiveRecord::Base
   before_create :create_pieces
 
   def process_turn!
+    captured_pieces = attacker_pieces_under_fire
+    resolve_artillery_combat!
+
     if infantry_all_engaged?
       self.turn_number += 1
       toggle_active_player!
       self.save
     end
-  end
 
-  def infantry_all_engaged?
-    true
+    captured_pieces.pluck(:id)
   end
 
   def squares_under_fire

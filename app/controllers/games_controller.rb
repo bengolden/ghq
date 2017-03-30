@@ -11,8 +11,8 @@ class GamesController < ApplicationController
   end
 
   def update
-    @game.process_turn!
-    render json: @game.squares_under_fire
+    captured_pieces = @game.process_turn!
+    render json: {under_fire: @game.squares_under_fire, captured: captured_pieces}
   end
 
   private

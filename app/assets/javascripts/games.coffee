@@ -74,10 +74,13 @@ $(document).ready ->
         $(".under-fire").removeClass("under-fire")
         $(".board-square").attr("data-under-fire",false)
 
-        $(response).each ->
+        $(response["under_fire"]).each ->
           square = $(".board-square[data-row=" + this["row"] + "][data-column=" + this["column"] + "]")
           square.attr("data-under-fire", "true")
           square.children(".inner-square").addClass("under-fire")
+        $(response["captured"]).each ->
+          piece = $(".game-piece[data-id=" + this + "]")
+          removeFromBoard(piece)
 
         toggleActivePlayer()
         $(".game-piece." + activePlayer().text() + "-piece a").removeClass('disabled')
@@ -151,6 +154,13 @@ $(document).ready ->
     newSquare.find(".game-piece a").attr("data-status", newStatus)
 
     oldSquare.attr("data-empty", "true")
+    arrows.remove()
+    piece.remove()
+
+  removeFromBoard = (piece) ->
+    square = piece.closest(".board-square")
+    arrows = square.find(".arrow")
+    square.attr("data-empty", "true")
     arrows.remove()
     piece.remove()
 

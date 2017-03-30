@@ -19,7 +19,7 @@ class Piece < ActiveRecord::Base
   has_many :orders, dependent: :destroy
 
   enum color: [:white, :black]
-  enum status: [:reserve, :active, :defeated]
+  enum status: [:reserve, :active, :captured]
   enum direction: [:n, :ne, :e, :se, :s, :sw, :w, :nw]
 
   before_create :set_direction
@@ -28,6 +28,10 @@ class Piece < ActiveRecord::Base
   def artillery?; false; end
   def fast?; false; end
   def paratrooper?; false; end
+
+  def get_captured
+    update(row: nil, column: nil, status: :captured)
+  end
 
   def set_direction
     self.direction = color == "black" ? :s : :n
