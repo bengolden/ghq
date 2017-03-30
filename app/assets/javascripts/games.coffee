@@ -134,7 +134,8 @@ $(document).ready ->
       $(".game-piece a").addClass('disabled')
 
   setPieceDirection = (piece, direction) ->
-    piece.removeClass("direction-" + piece.data("direction"))
+    $(['n','ne','e','se','s','sw','w','nw']).each ->
+      piece.removeClass("direction-" + this)
     piece.addClass("direction-" + direction)
     piece.attr("data-direction", direction)
     piece.find("a").attr("data-direction", direction)
