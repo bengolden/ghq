@@ -72,11 +72,11 @@ $(document).ready ->
         $("#turn-number").text( parseInt($("#turn-number").text()) + 1 )
         $("#undo-order, #confirm-orders").addClass("hide")
         $(".under-fire").removeClass("under-fire")
-        $(".board-square").data("under-fire",false)
+        $(".board-square").attr("data-under-fire",false)
 
         $(response).each ->
           square = $(".board-square[data-row=" + this["row"] + "][data-column=" + this["column"] + "]")
-          square.data("under-fire", "true")
+          square.attr("data-under-fire", "true")
           square.children(".inner-square").addClass("under-fire")
 
         toggleActivePlayer()
@@ -131,8 +131,8 @@ $(document).ready ->
       $(".game-piece a").addClass('disabled')
 
   setPieceDirection = (piece, direction) ->
-    piece.removeClass("direction-"+piece.data("direction"))
-    piece.addClass("direction-"+direction)
+    piece.removeClass("direction-" + piece.data("direction"))
+    piece.addClass("direction-" + direction)
     piece.attr("data-direction", direction)
     piece.find("a").attr("data-direction", direction)
 
