@@ -8,22 +8,20 @@ $(document).ready ->
   $("#game-area").on "click", ".game-piece a", (e)->
     e.preventDefault()
     if $(".original-square").length > 0
-      movedPiece = $(".intermediate-square .game-piece")
-      if movedPiece.data("id") != $(this).closest(".game-piece").data("id")
-        movePiece(movedPiece, $(".original-square"))
-
+      revertIncompleteMove($(this).closest(".game-piece").data("id"))
+    square = $(this).closest(".board-square")
     clearSelectedPieces()
     clearHighlights()
     $(this).addClass("selected-piece")
     if $(this).attr("data-status") == "reserve"
       highlightBackRow()
-    else if $(this).data('unit-type') == "paratrooper" && $(this).closest(".board-square").data("row").toString() == backRow()
+    else if $(this).data('unit-type') == "paratrooper" && square.data("row").toString() == backRow()
       highlightEmptySquares()
     else
       highlightAdjacentSquares($(this))
       direction = $(this).attr("data-direction")
       if direction != null
-        $(this).closest(".board-square").find(".arrow[data-direction!='" + direction + "']").removeClass('hide')
+        square.find(".arrow[data-direction!='" + direction + "']").removeClass('hide')
 
   $("#game-board").on "click", ".highlighted-square", (e)->
     e.preventDefault()
@@ -31,7 +29,7 @@ $(document).ready ->
     intermediate = $(".intermediate-square")
     selectedPiece = $(".selected-piece").closest(".game-piece")
 
-    if $(".selected-piece").data("fast") == true && intermediate.length == 0 && $(".selected-piece").data("status") != "reserve"
+    if $(".selected-piece").data("fast") == true && intermediate.length == 0 && $(".selected-piece").attr("data-status") != "reserve"
       selectedPiece.closest(".board-square").addClass("original-square")
       movePiece(selectedPiece, destination)
       destination.addClass("intermediate-square")
@@ -39,7 +37,7 @@ $(document).ready ->
       clearHighlights()
       highlightAdjacentSquares($(this))
     else
-      type = if selectedPiece.children("a").data("status") == "reserve"
+      type = if selectedPiece.children("a").attr("data-status") == "reserve"
         "Deploy"
       else
         "Move"
@@ -160,6 +158,11 @@ $(document).ready ->
     arrows.remove()
     piece.remove()
 
+  revertIncompleteMove = (currentPieceId)->
+    movedPiece = $(".intermediate-square .game-piece")
+    if movedPiece.data("id") != currentPieceId
+      movePiece(movedPiece, $(".original-square"))
+
   backRow = ->
     if $("#active-player").text() == "white" then '7' else '0'
 
@@ -175,6 +178,9 @@ $(document).ready ->
     square = piece.closest(".board-square")
     row = square.data("row")
     column = square.data("column")
-    squares = $(".board-square").filter -> $(this).data("row") >= row - 1 && $(this).data("row") <= row + 1 && $(this).data("column") >= column - 1 && $(this).data("column") <= column + 1 && ($(this).attr("data-empty") == "true" || $(this).hasClass("intermediate-square")) && $(this).data("under-fire") == false
+    squares = $(".board-square").filter ->
+      r = $(this).data("row")
+      c = $(this).data("column")
+      r >= row - 1 && r <= row + 1 && c >= column - 1 && c <= column + 1 && ($(this).attr("data-empty") == "true" || $(this).hasClass("intermediate-square")) && $(this).attr("data-under-fire") == "false"
 
     squares.addClass("highlighted-square")
