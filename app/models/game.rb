@@ -23,6 +23,7 @@ class Game < ActiveRecord::Base
   def process_turn!
     captured_pieces = attacker_pieces_under_fire
     resolve_artillery_combat!
+    conduct_infantry_combat!
 
     if infantry_all_engaged?
       self.turn_number += 1

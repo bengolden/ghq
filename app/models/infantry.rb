@@ -15,4 +15,5 @@
 #
 
 class Infantry < Piece
+  def infantry?; true; end
 end

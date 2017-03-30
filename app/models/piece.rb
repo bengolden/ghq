@@ -24,8 +24,12 @@ class Piece < ActiveRecord::Base
 
   before_create :set_direction
   scope :artillery, ->{ where(type: ["Artillery", "FastArtillery", "HeavyArtillery"]) }
+  scope :infantry, ->{ where(type: ["Infantry", "FastInfantry", "Paratrooper"]) }
+
+  attr_accessor :engaged
 
   def artillery?; false; end
+  def infantry?; false; end
   def fast?; false; end
   def paratrooper?; false; end
 
@@ -43,6 +47,10 @@ class Piece < ActiveRecord::Base
 
   def name
     type.to_s.titleize
+  end
+
+  def unengaged?
+    engaged.nil?
   end
 
 end

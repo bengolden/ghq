@@ -14,6 +14,6 @@
 #  updated_at :datetime
 #
 
-class FastInfantry < Piece
+class FastInfantry < Infantry
   include Concerns::FastPiece
 end

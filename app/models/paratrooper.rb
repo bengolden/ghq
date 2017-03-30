@@ -14,6 +14,6 @@
 #  updated_at :datetime
 #
 
-class Paratrooper < Piece
+class Paratrooper < Infantry
   def paratrooper?; true; end
 end

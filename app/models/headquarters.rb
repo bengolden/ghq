@@ -14,5 +14,5 @@
 #  updated_at :datetime
 #
 
-class Headquarters < Infantry
+class Headquarters < Piece
 end
