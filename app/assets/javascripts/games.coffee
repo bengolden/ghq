@@ -15,10 +15,9 @@ $(document).ready ->
     clearSelectedPieces()
     clearHighlights()
     $(this).addClass("selected-piece")
-    backRow = if $(this).data("color") == "white" then '7' else '0'
-    if $(this).data("status") == "reserve"
-      highlightBackRow(backRow)
-    else if $(this).data('unit-type') == "paratrooper" && $(this).closest(".board-square").data("row").toString() == backRow
+    if $(this).attr("data-status") == "reserve"
+      highlightBackRow()
+    else if $(this).data('unit-type') == "paratrooper" && $(this).closest(".board-square").data("row").toString() == backRow()
       highlightEmptySquares()
     else
       highlightAdjacentSquares($(this))
@@ -77,9 +76,7 @@ $(document).ready ->
       (response)->
         $("#orders-list li").remove()
         $("#turn-number").text( parseInt($("#turn-number").text()) + 1 )
-        activePlayer = $("#active-player")
-        $("#undo-order").addClass("hide")
-        $("#confirm-orders").addClass("hide")
+        $("#undo-order, #confirm-orders").addClass("hide")
         $(".under-fire").removeClass("under-fire")
         $(".board-square").data("under-fire",false)
 
@@ -88,11 +85,8 @@ $(document).ready ->
           square.data("under-fire", "true")
           square.children(".inner-square").addClass("under-fire")
 
-        if activePlayer.text() == "white"
-          activePlayer.text("black")
-        else
-          activePlayer.text("white")
-        $(".game-piece." + activePlayer.text() + "-piece a").removeClass('disabled')
+        toggleActivePlayer()
+        $(".game-piece." + activePlayer().text() + "-piece a").removeClass('disabled')
 
   $("#undo-order").click (e)->
     e.preventDefault()
@@ -110,9 +104,18 @@ $(document).ready ->
 
         $("#confirm-orders").addClass('hide')
         lastOrder.remove()
-        $(".game-piece." + $("#active-player").text() + "-piece a").removeClass('disabled')
+        $(".game-piece." + activePlayer().text() + "-piece a").removeClass('disabled')
         if $("#orders-list li").length == 0
           $("#undo-order").addClass('hide')
+
+  activePlayer = ->
+    $("#active-player")
+
+  toggleActivePlayer = ->
+    if activePlayer().text() == "white"
+      activePlayer().text("black")
+    else
+      activePlayer().text("white")
 
   clearSelectedPieces = ->
     $(".selected-piece").removeClass("selected-piece")
@@ -140,29 +143,32 @@ $(document).ready ->
     piece.find("a").attr("data-direction", direction)
 
   movePiece = (piece, square) ->
-    arrows = piece.closest(".board-square").find(".arrow")
+    oldSquare = piece.closest(".board-square")
+    arrows = oldSquare.find(".arrow")
     undoDeploy = square.length == 0
     if undoDeploy
-      newSquare = $(".row ." + $("#active-player").text() + "-pieces")
+      newSquare = $(".row ." + activePlayer().text() + "-pieces")
     else
       newSquare = square.find(".inner-square")
       square.attr("data-empty", "false")
     newSquare.append(arrows.clone())
     newSquare.append(piece.clone())
-    if undoDeploy
-      newSquare.find(".game-piece a").attr("data-status", "reserve")
-    else
-      newSquare.find(".game-piece a").attr("data-status", "active")
-    piece.closest(".board-square").attr("data-empty", "true")
+    newStatus = if undoDeploy then "reserve" else "active"
+    newSquare.find(".game-piece a").attr("data-status", newStatus)
+
+    oldSquare.attr("data-empty", "true")
     arrows.remove()
     piece.remove()
 
-  highlightBackRow = (backRow) ->
-    squares = $(".board-square[data-row='" + backRow + "'][data-empty='true'][data-under-fire='false']")
+  backRow = ->
+    if $("#active-player").text() == "white" then '7' else '0'
+
+  highlightBackRow = ->
+    squares = $(".board-square[data-row='" + backRow() + "'][data-empty='true'][data-under-fire='false']")
     squares.addClass("highlighted-square")
 
   highlightEmptySquares = ->
-    squares = $(".board-square").filter -> $(this).data("empty") == true
+    squares = $("#game-board .board-square").filter -> $(this).attr("data-empty") == "true" && $(this).attr("data-under-fire") != "true"
     squares.addClass("highlighted-square")
 
   highlightAdjacentSquares = (piece) ->
