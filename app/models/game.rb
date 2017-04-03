@@ -21,7 +21,7 @@ class Game < ActiveRecord::Base
   before_create :create_pieces
 
   def process_turn!
-    captured_pieces = attacker_pieces_under_fire
+    @captured_pieces = attacker_pieces_under_fire
     resolve_artillery_combat!
     conduct_infantry_combat!
 
@@ -31,7 +31,7 @@ class Game < ActiveRecord::Base
       self.save
     end
 
-    captured_pieces.pluck(:id)
+    @captured_pieces.map(&:id)
   end
 
   def squares_under_fire

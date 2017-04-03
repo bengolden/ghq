@@ -18,35 +18,8 @@ module Concerns
     def conduct_infantry_combat!
       defender_infantry_engage!
       attacker_infantry_engage!
-    end
-
-    def attacker_infantry_engage!
-      attacker_infantry_engage_single_infantry!
-      attacker_infantry_engage_single_artillery!
-    end
-
-    def defender_infantry_engage_single_infantry!
-      while unengaged_attacker_infantry.any?{|di| unengaged_defender_infantry_adjacent_to(di).count == 1} do
-        unengaged_attacker_infantry.each do |di|
-          adjacent_defender_infantry = unengaged_defender_infantry_adjacent_to(di)
-          if adjacent_defender_infantry.count == 1
-            di.engaged = adjacent_defender_infantry.first.id
-            adjacent_defender_infantry.first.engaged = di.id
-          end
-        end
-      end
-    end
-
-    def defender_infantry_engage_single_artillery!
-      while unengaged_attacker_infantry.any?{|di| unengaged_defender_piece_adjacent_to(di).count == 1} do
-        unengaged_attacker_infantry.each do |di|
-          adjacent_defender_piece = unengaged_defender_piece_adjacent_to(di)
-          if adjacent_defender_piece.count == 1
-            di.engaged = adjacent_defender_piece.first.id
-            adjacent_defender_piece.first.engaged = di.id
-          end
-        end
-      end
+      # identify_attacker_choices!
+      identify_captured_pieces
     end
 
     def defender_infantry_engage!
@@ -58,6 +31,45 @@ module Concerns
             adjacent_attacker_infantry.first.engaged = di.id
           end
         end
+      end
+    end
+
+    def attacker_infantry_engage!
+      attacker_infantry_engage_single_infantry!
+      attacker_infantry_engage_single_artillery!
+    end
+
+    def attacker_infantry_engage_single_infantry!
+      while unengaged_attacker_infantry.any?{|di| unengaged_defender_infantry_adjacent_to(di).count == 1} do
+        unengaged_attacker_infantry.each do |di|
+          adjacent_defender_infantry = unengaged_defender_infantry_adjacent_to(di)
+          if adjacent_defender_infantry.count == 1
+            di.engaged = adjacent_defender_infantry.first.id
+            adjacent_defender_infantry.first.engaged = di.id
+          end
+        end
+      end
+    end
+
+    def attacker_infantry_engage_single_artillery!
+      while unengaged_attacker_infantry.any?{|di| unengaged_defender_pieces_adjacent_to(di).count == 1} do
+        unengaged_attacker_infantry.each do |di|
+          adjacent_defender_pieces = unengaged_defender_pieces_adjacent_to(di)
+          if adjacent_defender_pieces.count == 1
+            di.engaged = adjacent_defender_pieces.first.id
+            adjacent_defender_pieces.first.engaged = di.id
+          end
+        end
+      end
+    end
+
+    def identify_captured_pieces
+      engaged_defender_piece_ids = attacker_infantry.map(&:engaged)
+      @captured_pieces += defender_infantry.select do |di|
+        engaged_defender_piece_ids.select{|id| id == di.id}.length > 1
+      end
+      @captured_pieces += defender_pieces.select do |di|
+        !di.infantry? && engaged_defender_piece_ids.find{|id| id == di.id}
       end
     end
 
