@@ -23,15 +23,18 @@ class Game < ActiveRecord::Base
   def process_turn!
     @captured_pieces = attacker_pieces_under_fire
     resolve_artillery_combat!
-    conduct_infantry_combat!
+
+    conduct_infantry_combat
+    @captured_pieces += pieces_captured_by_infantry
+    resolve_infantry_combat!
 
     if infantry_all_engaged?
       self.turn_number += 1
       toggle_active_player!
       self.save
+      return @captured_pieces.map(&:id)
     end
 
-    @captured_pieces.map(&:id)
   end
 
   def squares_under_fire
