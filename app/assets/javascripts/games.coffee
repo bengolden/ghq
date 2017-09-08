@@ -83,7 +83,6 @@ $(document).ready ->
           removeFromBoard(piece)
 
         toggleActivePlayer()
-        $(".game-piece." + activePlayer().text() + "-piece a").removeClass('disabled')
 
   $("#undo-order").click (e)->
     e.preventDefault()
@@ -113,6 +112,8 @@ $(document).ready ->
       activePlayer().text("black")
     else
       activePlayer().text("white")
+    $(".game-piece").addClass('disabled')
+    $(".game-piece." + activePlayer().text() + "-piece a").removeClass('disabled')
 
   clearSelectedPieces = ->
     $(".selected-piece").removeClass("selected-piece")
