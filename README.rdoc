@@ -1,28 +1,13 @@
-== README
+Project Status:
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+This is largely working, you can move pieces around the board, artillery fire works, yada yada.
 
-Things you may want to cover:
+To Dos:
 
-* Ruby version
+* After moving, the moving player needs to decide which pieces to engage where. This should happen within games.coffee
 
-* System dependencies
+* Enable web-sockets, so that players can see when their opponent moves without having to refresh the page
 
-* Configuration
+* Log-in, and allowing players to move only their own pieces
 
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
-
-
-Please feel free to use a different markup language if you do not plan to run
-<tt>rake doc:app</tt>.
+* Adding some tests would be, ahem, maybe not so bad, wokka wokka
