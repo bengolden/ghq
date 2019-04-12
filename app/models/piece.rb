@@ -23,8 +23,8 @@ class Piece < ActiveRecord::Base
   enum direction: [:n, :ne, :e, :se, :s, :sw, :w, :nw]
 
   before_create :set_direction
-  scope :artillery, ->{ where(type: ["Artillery", "FastArtillery", "HeavyArtillery"]) }
-  scope :infantry, ->{ where(type: ["Infantry", "FastInfantry", "Paratrooper"]) }
+  scope :artillery, -> { where(type: ["Artillery", "FastArtillery", "HeavyArtillery"]) }
+  scope :infantry, -> { where(type: ["Infantry", "FastInfantry", "Paratrooper"]) }
 
   attr_accessor :engaged
 
@@ -52,5 +52,4 @@ class Piece < ActiveRecord::Base
   def unengaged?
     engaged.nil?
   end
-
 end

@@ -1,0 +1,23 @@
+Style/SingleLineMethods:
+  Enabled: False
+
+Style/StringLiterals:
+  Enabled: False
+
+Style/SymbolArray:
+  Enabled: False
+
+Style/WordArray:
+  Enabled: False
+
+Style/Documentation:
+  Enabled: False
+
+Layout/EmptyLineBetweenDefs:
+  Enabled: False
+
+Metrics/AbcSize:
+  Max: 25
+
+Metrics/LineLength:
+  Max: 100

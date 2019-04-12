@@ -19,7 +19,6 @@
 #
 
 class Move < Order
-
   before_create :set_initial_row_and_column
 
   def process!
@@ -56,5 +55,4 @@ class Move < Order
     self.initial_row = piece.row
     self.initial_column = piece.column
   end
-
 end

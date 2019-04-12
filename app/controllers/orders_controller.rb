@@ -1,11 +1,9 @@
 class OrdersController < ApplicationController
-
   before_action :load_game
 
   def create
-    game = Game.find_by(stub: params["gameStub"])
     piece = @game.pieces.find(params["pieceId"])
-    raise unless allowed_order_types.include? params["type"]
+    raise unless allowed_order_types.include?(params["type"])
 
     order = params["type"].constantize.create(piece: piece,
                                               turn_number: @game.turn_number,
@@ -13,10 +11,9 @@ class OrdersController < ApplicationController
                                               destination_row: params["newRow"],
                                               destination_column: params["newColumn"],
                                               intermediate_row: params["intermediateRow"],
-                                              intermediate_column: params["intermediateColumn"]
-                                              )
+                                              intermediate_column: params["intermediateColumn"])
     order.process!
-    render partial: "games/order", locals: {order: order}
+    render partial: "games/order", locals: { order: order }
   end
 
   def destroy
@@ -36,5 +33,4 @@ class OrdersController < ApplicationController
   def allowed_order_types
     ["Move", "Rotate", "Deploy"]
   end
-
 end

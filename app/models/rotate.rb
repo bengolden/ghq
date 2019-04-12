@@ -19,7 +19,6 @@
 #
 
 class Rotate < Order
-
   before_create :set_initial_direction
 
   def process!
@@ -34,8 +33,9 @@ class Rotate < Order
     "#{piece.name} rotates to face #{final_direction}"
   end
 
+  private
+
   def set_initial_direction
     self.initial_direction = piece.direction
   end
-
 end

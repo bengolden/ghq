@@ -19,7 +19,6 @@
 #
 
 class Deploy < Move
-
   def process!
     piece.update(status: :active, row: destination_row, column: destination_column)
   end
@@ -29,9 +28,7 @@ class Deploy < Move
     super
   end
 
-
   def to_s
     "#{piece.name} deploys to #{destination_cell}"
   end
-
 end
