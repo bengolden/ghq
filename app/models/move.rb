@@ -32,9 +32,11 @@ class Move < Order
   end
 
   def to_s
-    text = "#{piece.name} moves to #{destination_cell}"
-    text += " via #{intermediate_cell}" if intermediate_row.present?
-    text
+    "#{piece.name} " + [initial_cell, intermediate_cell, destination_cell].compact.join(" → ")
+  end
+
+  def initial_cell
+    cell(initial_row, initial_column)
   end
 
   def destination_cell
@@ -46,6 +48,8 @@ class Move < Order
   end
 
   def cell(row, column)
+    return nil unless row && column
+
     ("A".."H").to_a[column] + (row + 1).to_s
   end
 

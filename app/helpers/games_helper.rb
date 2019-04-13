@@ -1,5 +1,4 @@
 module GamesHelper
-
   def show_undo_orders?
     @game.orders_this_turn.exists?
   end
@@ -8,18 +7,18 @@ module GamesHelper
     @game.orders_this_turn.count == 3
   end
 
-  def square_classes(r,c)
+  def square_classes(row, column)
     classes = ""
-    classes +=' bottom-row' if r == 7
-    classes += (r+c).even? ? ' light' : ' dark'
+    classes += ' bottom-row' if row == 7
+    classes += (row + column).even? ? ' light' : ' dark'
     classes
   end
 
-  def piece_on_square(r,c)
-    @game.pieces.find{|p| p.status == "active" && p.row == r && p.column == c}
+  def piece_on_square(row, column)
+    @game.pieces.find { |p| p.status == "active" && p.row == row && p.column == column }
   end
 
-  def under_fire?(r,c)
-    @squares_under_fire.include?({row: r, column: c})
+  def under_fire?(row, column)
+    @squares_under_fire.include?(row: row, column: column)
   end
 end

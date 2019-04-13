@@ -1,10 +1,9 @@
 <div id="game-board">
   <% 8.times do |r| %>
     <% 8.times do |c| %>
-      <div class="board-square<%= square_classes(r,c) %>" data-row=<%= r %> data-column=<%= c %> data-empty=<%= piece_on_square(r,c).nil? %> data-under-fire=<%= under_fire?(r,c) %>>
-        <div class="inner-square<%= ' under-fire' if under_fire?(r,c) %>">
-          <%= render partial: "game_piece_area",
-                   locals: { piece: piece_on_square(r,c) } %>
+      <div class="board-square<%= square_classes(r, c) %>" data-row=<%= r %> data-column=<%= c %> data-empty=<%= piece_on_square(r, c).nil? %> data-under-fire=<%= under_fire?(r, c) %>>
+        <div class="inner-square<%= ' under-fire' if under_fire?(r, c) %>">
+          <%= render partial: "game_piece_area", locals: { piece: piece_on_square(r, c) } %>
         </div>
       </div>
     <% end %>
@@ -13,8 +12,7 @@
     </div>
     <div class="clearfix"></div>
   <% end %>
-  <% ("A".."H").each do |c| %>
-    <div class="column-label"><%= c %></div>
+  <% ("A".."H").each do |column| %>
+    <div class="column-label"><%= column %></div>
   <% end %>
-
 </div>

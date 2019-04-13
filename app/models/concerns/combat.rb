@@ -1,18 +1,17 @@
 module Concerns
   module Combat
-
     def resolve_artillery_combat!
       attacker_pieces_under_fire.each(&:get_captured)
     end
 
     def attacker_pieces_under_fire
       active_attacker_pieces.select do |a|
-        squares_under_fire.include?({row: a.row, column: a.column})
+        squares_under_fire.include?(row: a.row, column: a.column)
       end
     end
 
     def active_attacker_pieces
-      @active_attacker_pierce ||= pieces.active.where(color: active_player)
+      @active_attacker_pieces ||= pieces.active.where(color: active_player)
     end
 
     def conduct_infantry_combat
@@ -26,7 +25,7 @@ module Concerns
     end
 
     def defender_infantry_engage!
-      while unengaged_defender_infantry.any?{|di| unengaged_attacker_infantry_adjacent_to(di).count == 1} do
+      while unengaged_defender_infantry.any? { |di| unengaged_attacker_infantry_adjacent_to(di).count == 1 } do
         unengaged_defender_infantry.each do |di|
           adjacent_attacker_infantry = unengaged_attacker_infantry_adjacent_to(di)
           if adjacent_attacker_infantry.count == 1
@@ -75,11 +74,11 @@ module Concerns
     end
 
     def captured_infantry
-      defender_infantry.select{ |di| engaged_defender_piece_ids.select{|id| id == di.id}.length > 1 }
+      defender_infantry.select { |di| engaged_defender_piece_ids.select { |id| id == di.id }.length > 1 }
     end
 
     def captured_non_infantry
-      defender_pieces.select{ |dp| !dp.infantry? && engaged_defender_piece_ids.find{|id| id == dp.id} }
+      defender_pieces.select { |dp| !dp.infantry? && engaged_defender_piece_ids.find { |id| id == dp.id } }
     end
 
     def defender_infantry
@@ -118,6 +117,7 @@ module Concerns
 
     def adjacent_pieces?(piece1, piece2)
       return false if piece1.nil? || piece2.nil?
+
       [piece1.row - piece2.row, piece1.column - piece2.column].map(&:abs).sort == [0, 1]
     end
 

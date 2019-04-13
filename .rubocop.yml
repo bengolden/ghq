@@ -20,4 +20,4 @@ Metrics/AbcSize:
   Max: 25
 
 Metrics/LineLength:
-  Max: 100
+  Max: 110
