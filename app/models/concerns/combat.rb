@@ -1,7 +1,7 @@
 module Concerns
   module Combat
     def resolve_artillery_combat!
-      attacker_pieces_under_fire.each(&:get_captured)
+      attacker_pieces_under_fire.each(&:become_captured)
     end
 
     def attacker_pieces_under_fire
@@ -21,17 +21,16 @@ module Concerns
     end
 
     def resolve_infantry_combat!
-      pieces_captured_by_infantry.each(&:get_captured)
+      pieces_captured_by_infantry.each(&:become_captured)
     end
 
     def defender_infantry_engage!
-      while unengaged_defender_infantry.any? { |di| unengaged_attacker_infantry_adjacent_to(di).count == 1 } do
+      while unengaged_defender_infantry.any? { |di| unengaged_attacker_infantry_adjacent_to(di).count == 1 }
         unengaged_defender_infantry.each do |di|
           adjacent_attacker_infantry = unengaged_attacker_infantry_adjacent_to(di)
-          if adjacent_attacker_infantry.count == 1
-            di.engaged = adjacent_attacker_infantry.first.id
-            adjacent_attacker_infantry.first.engaged = di.id
-          end
+          next unless adjacent_attacker_infantry.count == 1
+
+          engagements.create(attacker: adjacent_attacker_infantry.first, defender: di)
         end
       end
     end
@@ -42,25 +41,23 @@ module Concerns
     end
 
     def attacker_infantry_engage_single_infantry!
-      while unengaged_attacker_infantry.any?{|di| defender_infantry_adjacent_to(di).count == 1} do
+      while unengaged_attacker_infantry.any? { |di| defender_infantry_adjacent_to(di).count == 1 }
         unengaged_attacker_infantry.each do |di|
           adjacent_defender_infantry = defender_infantry_adjacent_to(di)
-          if adjacent_defender_infantry.count == 1
-            di.engaged = adjacent_defender_infantry.first.id
-            adjacent_defender_infantry.first.engaged = di.id
-          end
+          next unless adjacent_defender_infantry.count == 1
+
+          engagements.create(attacker: adjacent_attacker_infantry.first, defender: di)
         end
       end
     end
 
     def attacker_infantry_engage_single_artillery!
-      while unengaged_attacker_infantry.any?{|di| defender_pieces_adjacent_to(di).count == 1} do
+      while unengaged_attacker_infantry.any? { |di| defender_pieces_adjacent_to(di).count == 1 }
         unengaged_attacker_infantry.each do |di|
           adjacent_defender_pieces = defender_pieces_adjacent_to(di)
-          if adjacent_defender_pieces.count == 1
-            di.engaged = adjacent_defender_pieces.first.id
-            adjacent_defender_pieces.first.engaged = di.id
-          end
+          next unless adjacent_defender_pieces.count == 1
+
+          engagements.create(attacker: adjacent_defender_pieces.first, defender: di)
         end
       end
     end
@@ -74,11 +71,11 @@ module Concerns
     end
 
     def captured_infantry
-      defender_infantry.select { |di| engaged_defender_piece_ids.select { |id| id == di.id }.length > 1 }
+      defender_infantry.select { |di| di.defender_engagements.where(turn_number: turn_number).count > 1 }
     end
 
     def captured_non_infantry
-      defender_pieces.select { |dp| !dp.infantry? && engaged_defender_piece_ids.find { |id| id == dp.id } }
+      defender_pieces.select { |dp| dp.defender_engagements.where(turn_number: turn_number).exists? }
     end
 
     def defender_infantry

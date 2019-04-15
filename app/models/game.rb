@@ -12,12 +12,11 @@
 
 class Game < ActiveRecord::Base
   include Concerns::Combat
-  include Concerns::InfantryCombat
-  include Concerns::ArtilleryCombat
 
   enum active_player: [:white, :black]
   has_many :pieces, dependent: :destroy
   has_many :orders, through: :pieces
+  has_many :engagements
 
   before_create :set_defaults
   before_create :create_pieces

@@ -2,21 +2,24 @@
 #
 # Table name: pieces
 #
-#  id         :integer          not null, primary key
-#  type       :string
-#  game_id    :integer
-#  status     :integer
-#  row        :integer
-#  column     :integer
-#  direction  :integer
-#  color      :integer
-#  created_at :datetime
-#  updated_at :datetime
+#  id            :integer          not null, primary key
+#  type          :string
+#  game_id       :integer
+#  status        :integer
+#  row           :integer
+#  column        :integer
+#  direction     :integer
+#  color         :integer
+#  created_at    :datetime
+#  updated_at    :datetime
+#  captured_turn :integer
 #
 
 class Piece < ActiveRecord::Base
   belongs_to :game
   has_many :orders, dependent: :destroy
+  has_many :attacker_engagements, class_name: "Engagement", foreign_key: :attacker_id
+  has_many :defender_engagements, class_name: "Engagement", foreign_key: :defender_id
 
   enum color: [:white, :black]
   enum status: [:reserve, :active, :captured]
@@ -26,15 +29,13 @@ class Piece < ActiveRecord::Base
   scope :artillery, -> { where(type: ["Artillery", "FastArtillery", "HeavyArtillery"]) }
   scope :infantry, -> { where(type: ["Infantry", "FastInfantry", "Paratrooper"]) }
 
-  attr_accessor :engaged
-
   def artillery?; false; end
   def infantry?; false; end
   def fast?; false; end
   def paratrooper?; false; end
 
-  def get_captured
-    update(row: nil, column: nil, status: :captured)
+  def become_captured
+    update(row: nil, column: nil, status: :captured, captured_turn_number: game.turn_number)
   end
 
   def set_direction
@@ -49,7 +50,12 @@ class Piece < ActiveRecord::Base
     type.to_s.titleize
   end
 
+  def engaged?
+    attacker_engagements.where(turn_number: game.turn_number).exists? ||
+      defender_engagements.where(turn_number: game.turn_number).exists?
+  end
+
   def unengaged?
-    engaged.nil?
+    !engaged?
   end
 end
