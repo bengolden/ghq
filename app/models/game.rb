@@ -12,6 +12,8 @@
 
 class Game < ActiveRecord::Base
   include Concerns::Combat
+  include Concerns::InfantryCombat
+  include Concerns::ArtilleryCombat
 
   enum active_player: [:white, :black]
   has_many :pieces, dependent: :destroy

@@ -42,7 +42,7 @@ class Piece < ActiveRecord::Base
   end
 
   def css_class
-    type.to_s.underscore.gsub("_","-")
+    type.to_s.underscore.gsub("_", "-")
   end
 
   def name
