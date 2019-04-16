@@ -34,7 +34,7 @@ class Piece < ActiveRecord::Base
   def fast?; false; end
   def paratrooper?; false; end
 
-  def become_captured
+  def set_as_captured
     update(row: nil, column: nil, status: :captured, captured_turn_number: game.turn_number)
   end
 

@@ -17,7 +17,7 @@ module Concerns
     end
 
     def resolve_infantry_combat!
-      pieces_captured_by_infantry.each(&:become_captured)
+      captured_pieces.each(&:set_as_captured)
     end
 
     def defender_infantry_engage!
@@ -58,7 +58,7 @@ module Concerns
       end
     end
 
-    def pieces_captured_by_infantry
+    def captured_pieces
       captured_infantry + captured_non_infantry
     end
 
