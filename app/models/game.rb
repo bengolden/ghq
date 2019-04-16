@@ -16,7 +16,7 @@ class Game < ActiveRecord::Base
   enum active_player: [:white, :black]
   has_many :pieces, dependent: :destroy
   has_many :orders, through: :pieces
-  has_many :engagements
+  has_many :engagements, dependent: :destroy
 
   before_create :set_defaults
   before_create :create_pieces

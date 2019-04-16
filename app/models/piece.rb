@@ -18,8 +18,8 @@
 class Piece < ActiveRecord::Base
   belongs_to :game
   has_many :orders, dependent: :destroy
-  has_many :attacker_engagements, class_name: "Engagement", foreign_key: :attacker_id
-  has_many :defender_engagements, class_name: "Engagement", foreign_key: :defender_id
+  has_many :attacker_engagements, class_name: "Engagement", foreign_key: "attacker_id"
+  has_many :defender_engagements, class_name: "Engagement", foreign_key: "defender_id"
 
   enum color: [:white, :black]
   enum status: [:reserve, :active, :captured]
