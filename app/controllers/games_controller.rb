@@ -15,7 +15,7 @@ class GamesController < ApplicationController
   end
 
   def update
-    captured_pieces = @game.process_turn!
+    captured_pieces = @game.process_orders
     render json: { under_fire: @game.squares_under_fire, captured: captured_pieces }
   end
 

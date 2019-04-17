@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190415232112) do
+ActiveRecord::Schema.define(version: 20190416221933) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -21,8 +21,11 @@ ActiveRecord::Schema.define(version: 20190415232112) do
     t.integer  "attacker_id"
     t.integer  "defender_id"
     t.boolean  "locked"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+    t.integer  "defender_row"
+    t.integer  "defender_column"
+    t.integer  "direction"
   end
 
   create_table "games", force: :cascade do |t|
@@ -31,6 +34,7 @@ ActiveRecord::Schema.define(version: 20190415232112) do
     t.string   "stub"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "phase"
   end
 
   create_table "orders", force: :cascade do |t|

@@ -1,23 +1,22 @@
 module Concerns
   module Combat
     def resolve_artillery_combat!
-      attacker_pieces_under_fire.each(&:become_captured)
+      @captured_pieces = attacker_pieces_under_fire
+      @captured_pieces.each(&:set_as_captured)
     end
 
     def attacker_pieces_under_fire
-      active_attacker_pieces.select do |a|
-        squares_under_fire.include?(row: a.row, column: a.column)
-      end
+      active_attacker_pieces.select { |a| squares_under_fire.include?(row: a.row, column: a.column) }
     end
 
     def conduct_infantry_combat
       defender_infantry_engage!
       attacker_infantry_engage!
-      # identify_attacker_choices!
     end
 
     def resolve_infantry_combat!
-      captured_pieces.each(&:set_as_captured)
+      @captured_pieces += pieces_captured_by_infantry
+      @captured_pieces.each(&:set_as_captured)
     end
 
     def defender_infantry_engage!
@@ -58,10 +57,6 @@ module Concerns
       end
     end
 
-    def captured_pieces
-      captured_infantry + captured_non_infantry
-    end
-
     def active_attacker_pieces
       @active_attacker_pieces ||= pieces.active.where(color: active_player)
     end
@@ -100,24 +95,24 @@ module Concerns
       defender_pieces.select { |dp| dp.defender_engagements.where(turn_number: turn_number).exists? }
     end
 
-    def unengaged_defender_infantry
-      defender_infantry.select(&:unengaged?)
+    def pieces_captured_by_infantry
+      captured_infantry + captured_non_infantry
     end
 
     def unengaged_defender_pieces
       defender_pieces.select(&:unengaged?)
     end
 
+    def unengaged_defender_infantry
+      defender_infantry.select(&:unengaged?)
+    end
+
     def defender_infantry_adjacent_to(piece)
-      defender_infantry.select do |di|
-        adjacent_pieces?(di, piece)
-      end
+      defender_infantry.select { |di| adjacent_pieces?(di, piece) }
     end
 
     def defender_pieces_adjacent_to(piece)
-      defender_pieces.select do |di|
-        adjacent_pieces?(di, piece)
-      end
+      defender_pieces.select { |di| adjacent_pieces?(di, piece) }
     end
 
     def adjacent_pieces?(piece1, piece2)

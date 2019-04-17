@@ -2,17 +2,17 @@
 #
 # Table name: pieces
 #
-#  id            :integer          not null, primary key
-#  type          :string
-#  game_id       :integer
-#  status        :integer
-#  row           :integer
-#  column        :integer
-#  direction     :integer
-#  color         :integer
-#  created_at    :datetime
-#  updated_at    :datetime
-#  captured_turn :integer
+#  id                   :integer          not null, primary key
+#  type                 :string
+#  game_id              :integer
+#  status               :integer
+#  row                  :integer
+#  column               :integer
+#  direction            :integer
+#  color                :integer
+#  created_at           :datetime
+#  updated_at           :datetime
+#  captured_turn_number :integer
 #
 
 class Piece < ActiveRecord::Base
@@ -43,7 +43,7 @@ class Piece < ActiveRecord::Base
   end
 
   def css_class
-    type.to_s.underscore.gsub("_", "-")
+    type.to_s.underscore.tr("_", "-")
   end
 
   def name

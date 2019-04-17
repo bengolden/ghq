@@ -8,12 +8,14 @@
 #  stub          :string
 #  created_at    :datetime
 #  updated_at    :datetime
+#  phase         :integer
 #
 
 class Game < ActiveRecord::Base
   include Concerns::Combat
 
   enum active_player: [:white, :black]
+  enum phase: [:orders, :engagements], _prefix: :phase
   has_many :pieces, dependent: :destroy
   has_many :orders, through: :pieces
   has_many :engagements, dependent: :destroy
@@ -21,20 +23,35 @@ class Game < ActiveRecord::Base
   before_create :set_defaults
   before_create :create_pieces
 
-  def process_turn!
-    @captured_pieces = attacker_pieces_under_fire
+  def process_orders
     resolve_artillery_combat!
 
     conduct_infantry_combat
-    @captured_pieces += pieces_captured_by_infantry
     resolve_infantry_combat!
 
-    return unless infantry_all_engaged?
+    if infantry_all_engaged?
+      process_turn!
+    else
+      initiate_engagements_phase
+    end
+  end
 
+  def process_turn!
     self.turn_number += 1
     toggle_active_player!
+    phase_orders!
     save
-    @captured_pieces.map(&:id)
+
+    { process_turn: true, captured_pieces: @captured_pieces.map(&:id) }
+  end
+
+  def initiate_engagements_phase
+    phase_engagements!
+
+    {
+      process_engagements: true,
+      engagements: engagements.map { |e| e.attributes.slice("defender_row", "defender_column", "direction") }
+    }
   end
 
   def squares_under_fire
