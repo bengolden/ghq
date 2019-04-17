@@ -68,21 +68,21 @@ $(document).ready ->
     $.post "/games/" + gameStub,
       _method: 'PUT'
       (response)->
-        $("#orders-list li").remove()
-        $("#turn-number").text( parseInt($("#turn-number").text()) + 1 )
-        $("#undo-order, #confirm-orders").addClass("hide")
-        $(".under-fire").removeClass("under-fire")
-        $(".board-square").attr("data-under-fire",false)
+        if (response["process_turn"] == true)
+          $("#orders-list li").remove()
+          $("#turn-number").text( parseInt($("#turn-number").text()) + 1 )
+          $("#undo-order, #confirm-orders").addClass("hide")
+          $(".under-fire").removeClass("under-fire")
+          $(".board-square").attr("data-under-fire",false)
+          toggleActivePlayer()
+          $(response["under_fire"]).each ->
+            square = $(".board-square[data-row=" + this["row"] + "][data-column=" + this["column"] + "]")
+            square.attr("data-under-fire", "true")
+            square.children(".inner-square").addClass("under-fire")
+          $(response["captured"]).each ->
+            piece = $(".game-piece[data-id=" + this + "]")
+            removeFromBoard(piece)
 
-        $(response["under_fire"]).each ->
-          square = $(".board-square[data-row=" + this["row"] + "][data-column=" + this["column"] + "]")
-          square.attr("data-under-fire", "true")
-          square.children(".inner-square").addClass("under-fire")
-        $(response["captured"]).each ->
-          piece = $(".game-piece[data-id=" + this + "]")
-          removeFromBoard(piece)
-
-        toggleActivePlayer()
 
   $("#undo-order").click (e)->
     e.preventDefault()

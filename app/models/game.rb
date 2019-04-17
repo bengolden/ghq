@@ -42,7 +42,7 @@ class Game < ActiveRecord::Base
     phase_orders!
     save
 
-    { process_turn: true, captured_pieces: @captured_pieces.map(&:id) }
+    { process_turn: true, captured_pieces: @captured_pieces.map(&:id), under_fire: squares_under_fire }
   end
 
   def initiate_engagements_phase
