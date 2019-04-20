@@ -2,10 +2,6 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-#game-area{
-  margin-top: 50px;
-}
-
 #game-description-area{
   margin-top: 50px;
 }
@@ -18,14 +14,26 @@
   border-bottom: 0;
 }
 
-#game-area .board-square.highlighted-square{
-  border-top: 4px solid darkred;
-  border-bottom: 4px solid darkred;
-  border-left: 4px solid darkred;
-  border-right: 4px solid darkred;
+#game-area{
+  margin-top: 50px;
 
-  &:hover{
-    cursor: pointer;
+  .board-square.highlighted-square{
+    border-top: 4px solid darkred;
+    border-bottom: 4px solid darkred;
+    border-left: 4px solid darkred;
+    border-right: 4px solid darkred;
+
+    &:hover{
+      cursor: pointer;
+    }
+  }
+
+  &.orders-phase .engagements{
+    display: none;
+  }
+
+  &.engagements-phase .orders{
+    display: none;
   }
 }
 

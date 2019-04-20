@@ -16,14 +16,28 @@
 #
 
 class Engagement < ActiveRecord::Base
+  include Concerns::Location
+
   belongs_to :game
   belongs_to :attacker, class_name: "Piece"
   belongs_to :defender, class_name: "Piece"
 
   before_create :set_turn_number
-  after_create :set_location_and_direction
+  after_create :set_location
+  after_create :set_direction
+
+  scope :for_turn, ->(turn_number) { where(turn_number: turn_number) }
+  scope :not_locked, -> { where.not(locked: true) }
 
   enum direction: [:up, :down, :left, :right], _prefix: :direction
+
+  def to_s
+    "#{piece_on_square(attacker)} engages #{piece_on_square(defender)}"
+  end
+
+  def piece_on_square(piece)
+    "#{piece.name} on #{square(piece.row, piece.column)}"
+  end
 
   private
 
@@ -31,16 +45,18 @@ class Engagement < ActiveRecord::Base
     self.turn_number = game.turn_number
   end
 
-  def set_location_and_direction
-    self.defender_row = defender.row
-    self.defender_column = defender.column
-    self.direction = if attacker_row < defender_row
+  def set_location
+    update(defender_row: defender.row, defender_column: defender.column)
+  end
+
+  def set_direction
+    self.direction = if attacker.row < defender.row
                        :up
-                     elsif attacker_row > defender_row
+                     elsif attacker.row > defender.row
                        :down
-                     elsif attacker_column < defender_column
+                     elsif attacker.column < defender.column
                        :left
-                     elsif attacker_column > defender_column
+                     elsif attacker.column > defender.column
                        :right
                      end
 

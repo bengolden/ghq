@@ -58,4 +58,8 @@ class Piece < ActiveRecord::Base
   def unengaged?
     !engaged?
   end
+
+  def current_attacker_engagement
+    attacker_engagements.find_by(turn_number: game.turn_number)
+  end
 end

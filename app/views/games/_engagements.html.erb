@@ -1,0 +1,21 @@
+<div class="engagements">
+  <h4>Engagements</h4>
+
+  <ul id="engagements-list">
+    <% @game.engagements_this_turn.each do |engagement| %>
+      <%= render "engagement", engagement: engagement %>
+    <% end %>
+  </ul>
+
+  <div id="undo-engagement" class=<%= 'hide' unless show_undo_engagements? %>>
+    <button class="btn btn-primary">
+      Undo
+    </button>
+  </div>
+
+  <div id="confirm-engagements" class=<%='hide' unless show_confirm_engagements?  %>>
+    <button class="btn btn-primary">
+      Confirm engagements
+    </button>
+  </div>
+</div>

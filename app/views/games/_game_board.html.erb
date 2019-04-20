@@ -3,7 +3,7 @@
     <% 8.times do |c| %>
       <div class="board-square<%= square_classes(r, c) %>" data-row=<%= r %> data-column=<%= c %> data-empty=<%= piece_on_square(r, c).nil? %> data-under-fire=<%= under_fire?(r, c) %>>
         <div class="inner-square<%= ' under-fire' if under_fire?(r, c) %>">
-          <%= render partial: "game_piece_area", locals: { piece: piece_on_square(r, c) } %>
+          <%= render "game_piece_area", piece: piece_on_square(r, c), game: game %>
         </div>
       </div>
     <% end %>

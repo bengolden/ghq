@@ -19,6 +19,8 @@
 #
 
 class Move < Order
+  include Concerns::Location
+
   before_create :set_initial_row_and_column
 
   def process!
@@ -32,25 +34,19 @@ class Move < Order
   end
 
   def to_s
-    "#{piece.name} " + [initial_cell, intermediate_cell, destination_cell].compact.join(" → ")
+    "#{piece.name} " + [initial_square, intermediate_square, destination_square].compact.join(" → ")
   end
 
-  def initial_cell
-    cell(initial_row, initial_column)
+  def initial_square
+    square(initial_row, initial_column)
   end
 
-  def destination_cell
-    cell(destination_row, destination_column)
+  def destination_square
+    square(destination_row, destination_column)
   end
 
-  def intermediate_cell
-    cell(intermediate_row, intermediate_column)
-  end
-
-  def cell(row, column)
-    return nil unless row && column
-
-    ("A".."H").to_a[column] + (row + 1).to_s
+  def intermediate_square
+    square(intermediate_row, intermediate_column)
   end
 
   private

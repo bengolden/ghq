@@ -1,18 +1,20 @@
-<h4>Orders</h4>
-<ul id="orders-list">
-  <% @game.orders_this_turn.each do |order| %>
-    <%= render "order", order: order %>
-  <% end %>
-</ul>
+<div class="orders">
+  <h4>Orders</h4>
+  <ul id="orders-list">
+    <% @game.orders_this_turn.each do |order| %>
+      <%= render "order", order: order %>
+    <% end %>
+  </ul>
 
-<div id="undo-order" class=<%= 'hide' unless show_undo_orders? %>>
-  <button class="btn btn-primary">
-    Undo
-  </button>
-</div>
+  <div id="undo-order" class=<%= 'hide' unless show_undo_orders? %>>
+    <button class="btn btn-primary">
+      Undo
+    </button>
+  </div>
 
-<div id="confirm-orders" class=<%='hide' unless show_confirm_orders?  %>>
-  <button class="btn btn-primary">
-    Confirm orders
-  </button>
+  <div id="confirm-orders" class=<%='hide' unless show_confirm_orders?  %>>
+    <button class="btn btn-primary">
+      Confirm orders
+    </button>
+  </div>
 </div>

@@ -29,6 +29,6 @@ class Deploy < Move
   end
 
   def to_s
-    "#{piece.name} deploys to #{destination_cell}"
+    "#{piece.name} deploys to #{destination_square}"
   end
 end

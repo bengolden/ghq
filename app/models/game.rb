@@ -70,6 +70,10 @@ class Game < ActiveRecord::Base
     orders.for_turn(turn_number)
   end
 
+  def engagements_this_turn
+    engagements.for_turn(turn_number)
+  end
+
   private
 
   def set_defaults

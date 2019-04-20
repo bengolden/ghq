@@ -7,6 +7,14 @@ module GamesHelper
     @game.orders_this_turn.count == 3
   end
 
+  def show_undo_engagements?
+    @game.engagements_this_turn.not_locked.exists?
+  end
+
+  def show_confirm_engagements?
+    false
+  end
+
   def square_classes(row, column)
     classes = ""
     classes += ' bottom-row' if row == 7
