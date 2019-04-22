@@ -34,7 +34,7 @@ ActiveRecord::Schema.define(version: 20190416221933) do
     t.string   "stub"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "phase"
+    t.integer  "phase",         default: 0
   end
 
   create_table "orders", force: :cascade do |t|

@@ -7,6 +7,7 @@ class GamesController < ApplicationController
 
   def show
     @squares_under_fire = @game.squares_under_fire
+    @engagements = @game.engagements_this_turn
   end
 
   def create

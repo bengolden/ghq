@@ -1,4 +1,4 @@
-<%= render "game_piece", piece: piece unless piece.nil? %>
-<%= render "engagement_arrow", engagement: piece.current_attacker_engagement if piece.current_attacker_engagement %>
-<span>&#8596;</span>
-<span>&#8597;</span>
+<% if piece.present? %>
+  <%= render "game_piece", piece: piece %>
+  <%= engagement_arrow(piece) %>
+<% end %>
