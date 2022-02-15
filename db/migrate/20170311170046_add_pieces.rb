@@ -1,4 +1,4 @@
-class AddPieces < ActiveRecord::Migration
+class AddPieces < ActiveRecord::Migration[7.0]
   def change
     create_table :pieces do |t|
       t.string :type
@@ -8,7 +8,7 @@ class AddPieces < ActiveRecord::Migration
       t.integer :column
       t.integer :direction
       t.integer :color
- 
+
       t.timestamps
     end
   end

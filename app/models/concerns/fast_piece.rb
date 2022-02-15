@@ -1,5 +1,4 @@
-module Concerns
-  module FastPiece
-    def fast?; true; end
-  end
+module FastPiece
+  extend ActiveSupport::Concern
+  def fast?; true; end
 end

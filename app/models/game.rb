@@ -12,7 +12,7 @@
 #
 
 class Game < ActiveRecord::Base
-  include Concerns::Combat
+  include Combat
 
   enum active_player: [:white, :black]
   enum phase: [:orders, :engagements], _prefix: :phase

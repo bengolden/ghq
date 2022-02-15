@@ -16,7 +16,7 @@
 #
 
 class Engagement < ActiveRecord::Base
-  include Concerns::Location
+  include Location
 
   belongs_to :game
   belongs_to :attacker, class_name: "Piece"

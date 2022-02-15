@@ -19,7 +19,7 @@
 #
 
 class Move < Order
-  include Concerns::Location
+  include Location
 
   before_create :set_initial_row_and_column
 
